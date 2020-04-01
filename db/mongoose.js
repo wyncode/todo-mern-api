@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
@@ -12,16 +13,49 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 const User = mongoose.model('User', {
   name: {
-    type: String
+    type: String,
+    required: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true,
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error('Email is invalid.');
+      }
+    }
+  },
+  password: {
+    type: String,
+    required: true,
+    trime: true,
+    validate(value) {
+      if (value.toLowerCase() === 'password') {
+        throw new Error("Password can't be password.");
+      }
+      if (value.length < 6) {
+        throw new Error('Password must be at least 6 characters long.');
+      }
+    }
   },
   age: {
-    type: Number
+    type: Number,
+    default: 0,
+    validate(value) {
+      if (value < 0) {
+        throw new Error('Age must be a positive number.');
+      }
+    }
   }
 });
 
 const me = new User({
   name: 'Leo',
-  age: 35
+  email: 'LEO@GMAIL.COM     ',
+  password: 'pass'
 });
 
 me.save()
@@ -34,16 +68,18 @@ me.save()
 
 const Task = mongoose.model('Task', {
   description: {
-    type: String
+    type: String,
+    required: true,
+    trim: true
   },
   completed: {
-    type: Boolean
+    type: Boolean,
+    default: false
   }
 });
 
 const task = new Task({
-  description: 'Learn mongoose',
-  completed: false
+  description: 'Learn mongoose    '
 });
 
 task
