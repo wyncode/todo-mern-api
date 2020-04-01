@@ -31,7 +31,7 @@ const User = mongoose.model('User', {
   password: {
     type: String,
     required: true,
-    trime: true,
+    trim: true,
     validate(value) {
       if (value.toLowerCase() === 'password') {
         throw new Error("Password can't be password.");
