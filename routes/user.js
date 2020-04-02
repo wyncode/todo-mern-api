@@ -37,18 +37,17 @@ router.get('/users', async (req, res) => {
 router.get('/users/:id', async (req, res) => {
   const _id = req.params.id;
   if (mongoose.Types.ObjectId.isValid(_id)) {
-    try {
-      const user = await User.findById(_id);
-      if (!user) {
-        // The gotcha here is that this will only trigger if the param sent is 12 bits (12 character string)
-        return res.status(404).send();
-      }
-      res.send(user);
-    } catch (e) {
-      res.status(500).send();
-    }
-  } else {
     res.status(400).send('Not a valid user id');
+  }
+  try {
+    const user = await User.findById(_id);
+    if (!user) {
+      // The gotcha here is that this will only trigger if the param sent is 12 bits (12 character string)
+      return res.status(404).send();
+    }
+    res.send(user);
+  } catch (e) {
+    res.status(500).send();
   }
 });
 // ***********************************************//
