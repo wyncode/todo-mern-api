@@ -21,18 +21,17 @@ router.get('/tasks', async (req, res) => {
 // ***********************************************//
 router.get('/tasks/:id', async (req, res) => {
   const _id = req.params.id;
-  if (mongoose.Types.ObjectId.isValid(_id)) {
-    try {
-      const task = await Task.findById(_id);
-      res.send(task);
-      if (!task) {
-        return res.status(404).send();
-      }
-    } catch (e) {
-      res.status(500).send();
-    }
-  } else {
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
     res.status(400).send('Not a valid task id');
+  }
+  try {
+    const task = await Task.findById(_id);
+    res.send(task);
+    if (!task) {
+      return res.status(404).send();
+    }
+  } catch (e) {
+    res.status(500).send();
   }
 });
 
