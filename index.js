@@ -75,7 +75,7 @@ app.get('/tasks/:id', (req, res) => {
     Task.findById(_id)
       .then(task => {
         if (!task) {
-          // The gotcha here is that this will only trigger if the param sent is 12 bits (12 character string)
+          // The gotcha here is that this if will only trigger if the param sent is 12 bits (12 character string)
           return res.status(404).send();
         }
         res.send(task);
