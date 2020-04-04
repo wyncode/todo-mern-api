@@ -11,6 +11,11 @@ const taskRouter = require('./routes/task');
 
 const app = express();
 const port = process.env.PORT || 8080;
+
+// app.use((req, res, next) => {
+//   res.status(503).send('Site is down for maintenance, check back soon.');
+// });
+
 // Parse incomin JSON into objects
 app.use(express.json());
 // Call routes
