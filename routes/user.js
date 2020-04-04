@@ -122,6 +122,15 @@ router.post(
 );
 
 // ***********************************************//
+// Delete a user's avatar
+// ***********************************************//
+router.delete('/users/me/avatar', auth, async (req, res) => {
+  req.user.avatar = undefined;
+  await req.user.save();
+  res.send();
+});
+
+// ***********************************************//
 // Delete a user
 // ***********************************************//
 router.delete('/users/me', auth, async (req, res) => {
