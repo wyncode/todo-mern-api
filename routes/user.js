@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/user');
+const auth = require('../middleware/auth.js');
 
 // ***********************************************//
 // Create a user
@@ -35,16 +36,11 @@ router.post('/users/login', async (req, res) => {
 });
 
 // ***********************************************//
-// Get all users
+// Get current users
 // ***********************************************//
 
-router.get('/users', async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.send(users);
-  } catch (e) {
-    res.status(500).send();
-  }
+router.get('/users/me', auth, async (req, res) => {
+  res.send(req.user);
 });
 
 // ***********************************************//
@@ -52,9 +48,7 @@ router.get('/users', async (req, res) => {
 // ***********************************************//
 router.get('/users/:id', async (req, res) => {
   const _id = req.params.id;
-  if (mongoose.Types.ObjectId.isValid(_id)) {
-    res.status(400).send('Not a valid user id');
-  }
+
   try {
     const user = await User.findById(_id);
     if (!user) {
