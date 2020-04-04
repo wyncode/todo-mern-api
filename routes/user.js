@@ -31,7 +31,7 @@ router.post('/users/login', async (req, res) => {
     const token = await user.generateAuthToken();
     res.send({ user, token });
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).send();
   }
 });
 
@@ -63,7 +63,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
   }
 });
 // ***********************************************//
-// Get current users
+// Get current user
 // ***********************************************//
 
 router.get('/users/me', auth, async (req, res) => {
@@ -73,7 +73,7 @@ router.get('/users/me', auth, async (req, res) => {
 // ***********************************************//
 // Get a specific user
 // ***********************************************//
-router.get('/users/:id', async (req, res) => {
+router.get('/users/:id', auth, async (req, res) => {
   const _id = req.params.id;
 
   try {
