@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 const express = require('express');
+const cors = require('cors');
 
 // import db
 require('./db/mongoose');
@@ -10,6 +11,7 @@ const userRouter = require('./routes/user');
 const taskRouter = require('./routes/task');
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 8080;
 
 // app.use((req, res, next) => {
