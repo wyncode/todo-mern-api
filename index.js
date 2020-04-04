@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 const express = require('express');
+const port = process.env.PORT || 8080;
 const cors = require('cors');
 
 // import db
@@ -12,7 +13,6 @@ const taskRouter = require('./routes/task');
 
 const app = express();
 app.use(cors());
-const port = process.env.PORT || 8080;
 
 // app.use((req, res, next) => {
 //   res.status(503).send('Site is down for maintenance, check back soon.');
