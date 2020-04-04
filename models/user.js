@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
     validate(value) {
-      if (value.toLowerCase() === 'password') {
+      if (value.toLowerCase().includes('password')) {
         throw new Error("Password can't be password.");
       }
       if (value.length < 6) {
@@ -53,12 +53,21 @@ const userSchema = new mongoose.Schema({
   ]
 });
 
-// Generate Auth Token
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+  delete userObject.password;
+  delete userObject.tokens;
+  return userObject;
+};
+
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user.id.toString() }, 'neverstoplearning');
+  const token = jwt.sign({ _id: user._id.toString() }, 'neverstoplearning');
+
   user.tokens = user.tokens.concat({ token });
   await user.save();
+
   return token;
 };
 
