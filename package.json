@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest --watchAll --runInBand  --setupFiles dotenv/config"
+    "test": "jest --watchAll --runInBand  --setupFiles dotenv/config",
+    "prettier": "prettier '*/**/*.js' --write"
   },
   "jest": {
     "testEnvironment": "node"
