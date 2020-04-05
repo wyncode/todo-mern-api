@@ -1,5 +1,11 @@
 # Mern Todo API
 
+
+## Requirements
+ - [MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/) (quick install: install Homebrew and `run brew update && brew tap mongodb/brew && brew install mongodb-community@4.2`)
+   - `brew update`
+   - `brew tap mongodb/brew`
+   - `brew install mongodb-community@4.2`
 ## Setup
 
 - `git clone git@github.com:wyncode/todo-mern-api.git`
@@ -49,9 +55,6 @@ Add collection to your Postman account.
 ---
 
 ## Deployment
-
-
-
 
 ```
 heroku create
