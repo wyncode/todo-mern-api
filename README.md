@@ -50,11 +50,11 @@ Add collection to your Postman account.
 
 ## Deployment
 
-heroku create leo-task-manager-api
 
-# use your name instead of mine
+
 
 ```
+heroku create
 heroku config:set JWT_SECRET=neverstoplearning
 heroku config:set MONGODB_URL=yourconnectionstring
 heroku config:set SENDGRID_API_KEY=yourapikey
