@@ -45,3 +45,18 @@
 Add collection to your Postman account.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9736846b31eae2710b6c)
+
+---
+
+## Deployment
+
+heroku create leo-task-manager-api
+
+# use your name instead of mine
+
+```
+heroku config:set JWT_SECRET=neverstoplearning
+heroku config:set MONGODB_URL=yourconnectionstring
+heroku config:set SENDGRID_API_KEY=yourapikey
+git push heroku master
+```
