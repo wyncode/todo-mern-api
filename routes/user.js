@@ -1,6 +1,5 @@
 const express = require('express');
 const router = new express.Router();
-const mongoose = require('mongoose');
 const User = require('../models/user');
 const auth = require('../middleware/auth.js');
 const multer = require('multer');
