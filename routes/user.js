@@ -3,33 +3,58 @@ const router = new express.Router();
 const User = require('../models/user');
 const auth = require('../middleware/auth.js');
 const multer = require('multer');
+const bcrypt = require('bcryptjs');
 const sharp = require('sharp');
 const {
   sendWelcomeEmail,
-  sendCancellationEmail, 
+  sendCancellationEmail,
   forgotPasswordEmail
 } = require('../emails/account');
 
+// ***********************************************//
+// Reset Password
+// ***********************************************//
+
+router.get('/users/password/reset', async (req, res) => {
+  console.log('hit');
+  let newPassword = await bcrypt.hash(req.query.password, 8);
+  const update = { password: newPassword };
+  const filter = { email: req.query.email };
+
+  const user = await User.findOne({
+    email: req.query.email
+  });
+  console.log(user.tokens[0].token);
+
+  try {
+    if (user.tokens[0].token !== req.query.token) {
+      console.log('token not match');
+      throw new Error();
+    }
+
+    await User.findOneAndUpdate(filter, update);
+    res.status(200).send();
+  } catch (e) {
+    res.status(400).send(e.toString());
+  }
+});
 
 // ***********************************************//
 // Reset Password Email Request
 // ***********************************************//
 
 router.get('/users/password/forgot', async (req, res) => {
-  const user = await User.findOne({
-    email: req.body.email,
-  })
   try {
-    forgotPasswordEmail(user.email, user.name);
-    const token = await user.generateAuthToken();
+    const user = await User.findOne({
+      email: req.body.email
+    });
+
+    forgotPasswordEmail(user.email, user.name, user.tokens[0].token);
     res.status(200).send();
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).send(e.toString());
   }
 });
-
-
-
 
 // ***********************************************//
 // Create a user
