@@ -24,4 +24,14 @@ const sendCancellationEmail = (email, name) => {
   });
 };
 
-module.exports = { sendWelcomeEmail, sendCancellationEmail };
+const forgotPasswordEmail = (email, name) => {
+  sgMail.send({
+    to: email,
+    from: 'leo@wyncode.co',
+    subject: 'Password Reset.',
+    text: `Hi ${name}! Please click the link below to reset your password.`
+    // html: exampleHTMLEmail
+  });
+};
+
+module.exports = { sendWelcomeEmail, sendCancellationEmail, forgotPasswordEmail };

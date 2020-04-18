@@ -6,8 +6,30 @@ const multer = require('multer');
 const sharp = require('sharp');
 const {
   sendWelcomeEmail,
-  sendCancellationEmail
+  sendCancellationEmail, 
+  forgotPasswordEmail
 } = require('../emails/account');
+
+
+// ***********************************************//
+// Reset Password Email Request
+// ***********************************************//
+
+router.get('/users/password/forgot', async (req, res) => {
+  const user = await User.findOne({
+    email: req.body.email,
+  })
+  try {
+    forgotPasswordEmail(user.email, user.name);
+    const token = await user.generateAuthToken();
+    res.status(200).send();
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
+
+
 
 // ***********************************************//
 // Create a user
