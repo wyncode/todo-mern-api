@@ -16,7 +16,6 @@ const {
 // ***********************************************//
 
 router.get('/users/password/reset', async (req, res) => {
-  console.log('hit');
   let newPassword = await bcrypt.hash(req.query.password, 8);
   const update = { password: newPassword };
   const filter = { email: req.query.email };
@@ -24,11 +23,9 @@ router.get('/users/password/reset', async (req, res) => {
   const user = await User.findOne({
     email: req.query.email
   });
-  console.log(user.tokens[0].token);
 
   try {
     if (user.tokens[0].token !== req.query.token) {
-      console.log('token not match');
       throw new Error();
     }
 
