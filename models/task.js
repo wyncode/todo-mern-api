@@ -30,7 +30,7 @@ taskSchema.methods.toJSON = function () {
   const task = this;
   const taskObject = task.toObject();
   if (taskObject.dueDate) {
-    taskObject.dueDate = moment(taskObject.dueDate).format('MMM Do, YYYY');
+    taskObject.dueDate = moment(taskObject.dueDate).format('YYYY Mo Do');
   }
   return taskObject;
 };

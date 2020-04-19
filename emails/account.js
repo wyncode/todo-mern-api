@@ -3,8 +3,6 @@ const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
-// const exampleHTMLEmail = `<div>` + `<h1>Hello Email</h1>` + `</div>`;
-
 const sendWelcomeEmail = (email, name) => {
   sgMail.send({
     to: email,
@@ -24,4 +22,20 @@ const sendCancellationEmail = (email, name) => {
   });
 };
 
-module.exports = { sendWelcomeEmail, sendCancellationEmail };
+const forgotPasswordEmail = (email, token, password) => {
+  const exampleHTMLEmail = `<a  target="_blank" rel="noopener noreferrer" href="http://localhost:8080/users/password/reset?email=${email}&token=${token}&password=${password}>Reset Password</a>`;
+
+  sgMail.send({
+    to: email,
+    from: 'leo@wyncode.co',
+    subject: 'Password Reset.',
+    // text: `Hi ${name}! Please click the link below to reset your password.`
+    html: exampleHTMLEmail
+  });
+};
+
+module.exports = {
+  sendWelcomeEmail,
+  sendCancellationEmail,
+  forgotPasswordEmail
+};
