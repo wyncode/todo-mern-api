@@ -23,7 +23,9 @@ const sendCancellationEmail = (email, name) => {
 };
 
 const forgotPasswordEmail = (email, token, password) => {
-  const exampleHTMLEmail = `<a  target="_blank" rel="noopener noreferrer" href="${process.env.APP_URL}/users/password/reset?email=${email}&token=${token}&password=${password}>Reset Password</a>`;
+  const exampleHTMLEmail = `
+  <a target="_blank" rel="noopener noreferrer" href="${process.env.APP_URL}/users/password/reset?email=${email}&token=${token}&password=${password}">Reset Password</a>
+  `
 
   sgMail.send({
     to: email,
