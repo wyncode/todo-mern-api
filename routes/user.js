@@ -41,7 +41,6 @@ router.get('/users/password/reset', async (req, res) => {
 // ***********************************************//
 
 router.get('/users/password/forgot', async (req, res) => {
-  console.log("hi", req.query)
   try {
     const user = await User.findOne({
       email: req.query.email,
