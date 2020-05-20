@@ -41,12 +41,13 @@ router.get('/users/password/reset', async (req, res) => {
 // ***********************************************//
 
 router.get('/users/password/forgot', async (req, res) => {
+  console.log("hi", req.query)
   try {
     const user = await User.findOne({
-      email: req.body.email
+      email: req.query.email,
     });
 
-    forgotPasswordEmail(user.email, user.name, user.tokens[0].token);
+    forgotPasswordEmail(user.email, user.tokens[0].token, req.query.password);
     res.status(200).send();
   } catch (e) {
     res.status(400).send(e.toString());
@@ -94,7 +95,7 @@ router.post('/users/logout', auth, async (req, res) => {
       return token.token !== req.token;
     });
     await req.user.save();
-    res.send();
+    res.send({message:"Logged out!"});
   } catch (e) {
     res.status(500).send();
   }
