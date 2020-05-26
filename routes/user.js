@@ -30,7 +30,7 @@ router.get('/users/password/reset', async (req, res) => {
     }
 
     await User.findOneAndUpdate(filter, update);
-    res.status(200).send();
+    res.redirect('/');
   } catch (e) {
     res.status(400).send(e.toString());
   }
@@ -43,7 +43,7 @@ router.get('/users/password/reset', async (req, res) => {
 router.get('/users/password/forgot', async (req, res) => {
   try {
     const user = await User.findOne({
-      email: req.query.email,
+      email: req.query.email
     });
 
     forgotPasswordEmail(user.email, user.tokens[0].token, req.query.password);
@@ -94,7 +94,7 @@ router.post('/users/logout', auth, async (req, res) => {
       return token.token !== req.token;
     });
     await req.user.save();
-    res.send({message:"Logged out!"});
+    res.send({ message: 'Logged out!' });
   } catch (e) {
     res.status(500).send();
   }
