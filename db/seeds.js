@@ -5,18 +5,21 @@ require('./mongoose');
 const Task = require('../models/task'),
   User = require('../models/user');
 
-const faker = require('faker');
+const faker = require('faker'),
+  mongoose = require('mongoose');
 
 const dbReset = async () => {
-  await User.deleteMany({}, function (err) {
-    User.countDocuments({}, function (err, count) {
-      console.log('Number of users:', count);
-    });
+  const collections = Object.keys(mongoose.connection.collections);
+  for (const collectionName of collections) {
+    const collection = mongoose.connection.collections[collectionName];
+    await collection.deleteMany();
+  }
+
+  await User.countDocuments({}, function (err, count) {
+    console.log('Number of users:', count);
   });
-  await Task.deleteMany({}, function (err) {
-    Task.countDocuments({}, function (err, count) {
-      console.log('Number of tasks:', count);
-    });
+  await Task.countDocuments({}, function (err, count) {
+    console.log('Number of tasks:', count);
   });
   const userIdArray = [];
 
