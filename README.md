@@ -13,6 +13,7 @@
 - `yarn`
 - `cp sample.env .env`
 - Fill in the environment variables.
+- Reset and seed the database with `yarn db:reset`
 - `yarn dev`
 
 ## NPM Packages Used
