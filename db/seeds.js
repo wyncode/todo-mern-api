@@ -4,8 +4,7 @@ const Task = require('../models/task'),
   User = require('../models/user');
 
 const mongoose = require('mongoose'),
-  faker = require('faker'),
-  moment = require('moment');
+  faker = require('faker');
 
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
@@ -22,7 +21,7 @@ const dbReset = async () => {
   });
   await Task.deleteMany({}, function (err) {
     Task.countDocuments({}, function (err, count) {
-      console.log('Number of users:', count);
+      console.log('Number of tasks:', count);
     });
   });
   const userIdArray = [];
@@ -42,9 +41,7 @@ const dbReset = async () => {
     const task = new Task({
       description: faker.lorem.paragraph(),
       completed: Boolean(Math.round(Math.random())),
-      dueDate: moment(Date.now())
-        .add(Math.floor(Math.random() * 12) + 1, 'weeks')
-        .toDate(),
+      dueDate: faker.date.future(),
       owner: userIdArray[Math.floor(Math.random() * userIdArray.length)]
     });
     await task.save();
