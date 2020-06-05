@@ -1,17 +1,11 @@
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
+require('./mongoose');
+
 const Task = require('../models/task'),
   User = require('../models/user');
 
-const mongoose = require('mongoose'),
-  faker = require('faker');
-
-mongoose.connect(process.env.MONGODB_URL, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false
-});
+const faker = require('faker');
 
 const dbReset = async () => {
   await User.deleteMany({}, function (err) {
@@ -55,5 +49,3 @@ const dbReset = async () => {
 };
 
 dbReset();
-
-// console.log(me);
