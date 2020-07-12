@@ -1,29 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+import React from 'react';
+import moment from 'moment';
 import CompleteButton from './CompleteButton';
 import DeleteButton from './DeleteButton';
 
-const Task = () => {
-  const { tasks, setTasks } = useContext(AuthContext);
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const response = await axios.get('/tasks?sortBy=dueDate:asc', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setTasks(await response.data);
-      } catch (error) {
-        console.log(`Tasks Request Error: `, error);
-      }
-    };
-    getTasks();
-  }, [setTasks, token, tasks]);
-
+const Task = ({ tasks }) => {
   return (
     <>
       {tasks.map((task) => (
@@ -35,7 +15,11 @@ const Task = () => {
               task.description
             )}
           </td>
-          <td>{task.dueDate}</td>
+          <td>
+            {task.dueDate
+              ? moment(task.dueDate).format('MMM Do, YYYY')
+              : 'No Due Date'}
+          </td>
           <td>
             <CompleteButton task={task} />
             <DeleteButton id={task._id} />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import swal from 'sweetalert';
 import axios from 'axios';
 
 const CompleteButton = ({ task }) => {
@@ -13,6 +14,7 @@ const CompleteButton = ({ task }) => {
         url: `/tasks/${task._id}`,
         data: { completed: !task.completed }
       });
+      swal('Updated', 'Your task has been updated!', 'success');
       console.log(response);
     } catch (error) {
       console.log(`Update Error: `, error);

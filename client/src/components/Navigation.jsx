@@ -2,10 +2,18 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
+import dueFilter from '../helpers/DueFilter';
 import Logout from './Logout';
 
 const Navigation = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, tasks, setFilteredTasks, setCurrentFilter } = useContext(
+    AuthContext
+  );
+
+  const filterCompleted = (query) => {
+    dueFilter(query, tasks, setFilteredTasks);
+    setCurrentFilter(query);
+  };
 
   return (
     <Navbar bg="light" expand="lg">
@@ -16,8 +24,15 @@ const Navigation = () => {
       {currentUser && (
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#home">Completed</Nav.Link>
-            <Nav.Link href="#link">Pending</Nav.Link>
+            <Nav.Item
+              className="mr-2"
+              onClick={() => filterCompleted('Completed')}
+            >
+              Completed
+            </Nav.Item>
+            <Nav.Item onClick={() => filterCompleted('Pending')}>
+              Pending
+            </Nav.Item>
           </Nav>
           <Nav>
             <Nav.Item>
