@@ -7,6 +7,8 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [currentFilter, setCurrentFilter] = useState('');
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -32,7 +34,11 @@ export const AuthProvider = ({ children }) => {
         isLoggedIn,
         setIsLoggedIn,
         tasks,
-        setTasks
+        setTasks,
+        filteredTasks,
+        setFilteredTasks,
+        currentFilter,
+        setCurrentFilter
       }}
     >
       {children}

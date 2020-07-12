@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
+import swal from 'sweetalert';
 
 const TaskForm = () => {
   const [taskData, setTaskData] = useState('');
@@ -8,6 +9,7 @@ const TaskForm = () => {
 
   const handleChange = (e) => {
     setTaskData({ ...taskData, [e.target.name]: e.target.value });
+    console.log('taskData', taskData);
   };
 
   const handleTaskSubmission = async (e) => {
@@ -19,7 +21,7 @@ const TaskForm = () => {
         headers: { Authorization: `Bearer ${token}` },
         data: taskData
       });
-      alert('Task has been added!');
+      swal('New Task!', 'You task has been added!', 'success');
       setTaskData({});
       console.log(response);
     } catch (error) {
