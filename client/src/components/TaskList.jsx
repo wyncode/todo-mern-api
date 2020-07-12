@@ -43,7 +43,14 @@ const TaskList = () => {
     } else if (currentFilter.length < 1) {
       setFilteredTasks(tasks);
     }
-  }, [search, setFilteredTasks, tasks, currentFilter.length, filteredTasks]);
+  }, [
+    search,
+    setFilteredTasks,
+    tasks,
+    currentFilter.length,
+    filteredTasks,
+    currentFilter
+  ]);
 
   return (
     <Container>

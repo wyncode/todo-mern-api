@@ -39,6 +39,18 @@ const dueFilter = (query, tasks, setFilteredTasks) => {
       });
       filteredTasks = notDue;
       break;
+    case 'Completed':
+      const completed = tasks.filter((task) => {
+        return task.completed;
+      });
+      filteredTasks = completed;
+      break;
+    case 'Pending':
+      const pending = tasks.filter((task) => {
+        return !task.completed;
+      });
+      filteredTasks = pending;
+      break;
     default:
       filteredTasks = tasks;
   }
