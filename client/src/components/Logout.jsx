@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
-import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import swal from 'sweetalert';
+import axios from 'axios';
 
 const Logout = () => {
   const { setCurrentUser } = useContext(AuthContext);
@@ -16,7 +17,7 @@ const Logout = () => {
       });
       localStorage.removeItem('token');
       setCurrentUser(null);
-      alert(response.data.message);
+      swal(response.data.message, 'You have signed out!', 'success');
     } catch (error) {
       console.log('Logout Error: ', error);
     }
