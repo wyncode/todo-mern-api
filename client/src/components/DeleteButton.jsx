@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import swal from 'sweetalert';
+import { AuthContext } from '../context/AuthContext';
 
 const DeleteButton = ({ id }) => {
+  const { setLoading } = useContext(AuthContext);
   const token = localStorage.getItem('token');
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       const willDelete = await swal({
         title: 'Are you sure?',
@@ -26,6 +29,7 @@ const DeleteButton = ({ id }) => {
             icon: 'success'
           });
           console.log(response);
+          setLoading(false);
         } catch (error) {}
       } else {
         swal('Your task is safe!');
