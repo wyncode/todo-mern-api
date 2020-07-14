@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FormControl } from 'react-bootstrap';
+import { AuthContext } from '../context/AuthContext';
 
-const Search = ({ setSearch }) => {
+const Search = () => {
+  const { setSearch } = useContext(AuthContext);
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
+
   return (
     <div>
       <FormControl

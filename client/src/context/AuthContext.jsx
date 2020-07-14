@@ -5,10 +5,11 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [search, setSearch] = useState('');
+  const [currentFilter, setCurrentFilter] = useState(null);
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const [currentFilter, setCurrentFilter] = useState('');
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -31,14 +32,16 @@ export const AuthProvider = ({ children }) => {
       value={{
         currentUser,
         setCurrentUser,
-        isLoggedIn,
-        setIsLoggedIn,
         tasks,
         setTasks,
-        filteredTasks,
-        setFilteredTasks,
+        search,
+        setSearch,
         currentFilter,
-        setCurrentFilter
+        setCurrentFilter,
+        setFilteredTasks,
+        filteredTasks,
+        loading,
+        setLoading
       }}
     >
       {children}

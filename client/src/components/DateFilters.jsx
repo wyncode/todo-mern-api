@@ -4,18 +4,12 @@ import dueFilter from '../helpers/DueFilter';
 import { AuthContext } from '../context/AuthContext';
 
 const DateFilters = () => {
-  const {
-    tasks,
-    setFilteredTasks,
-    currentFilter,
-    setCurrentFilter
-  } = useContext(AuthContext);
+  const { tasks, setFilteredTasks, currentFilter } = useContext(AuthContext);
 
   const filters = ['Due Soon', 'Due Later', 'Past Due', 'Not Due', 'All'];
 
   const filterByDate = (query) => {
     dueFilter(query, tasks, setFilteredTasks);
-    setCurrentFilter(query);
   };
 
   const filterClass = (filter) => {
