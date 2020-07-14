@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Container, Table } from 'react-bootstrap';
 import axios from 'axios';
 import Task from './Task';
@@ -7,13 +7,12 @@ import { AuthContext } from '../context/AuthContext';
 
 const TaskList = () => {
   const token = localStorage.getItem('token');
-  const [search, setSearch] = useState('');
   const {
-    tasks,
     setTasks,
-    setFilteredTasks,
+    search,
     filteredTasks,
-    currentFilter
+    setFilteredTasks,
+    loading
   } = useContext(AuthContext);
 
   // initital render will set all the todos to the `tasks` state
@@ -26,35 +25,17 @@ const TaskList = () => {
       })
       .then((response) => {
         setTasks(response.data);
+        setFilteredTasks(response.data);
       })
       .catch((error) => {
         console.log(`Tasks Request Error: `, error);
       });
-  }, [token, setTasks, tasks]);
-
-  // whenever a filter is applied, it updates the tasks to render
-  useEffect(() => {
-    if (search.length > 1) {
-      setFilteredTasks(
-        tasks.filter((task) => {
-          return task.description.toLowerCase().includes(search.toLowerCase());
-        })
-      );
-    } else if (currentFilter.length < 1) {
-      setFilteredTasks(tasks);
-    }
-  }, [
-    search,
-    setFilteredTasks,
-    tasks,
-    currentFilter.length,
-    filteredTasks,
-    currentFilter
-  ]);
+    // when setTasks, setFilteredTasks, and search values are changed, it will rerender.
+  }, [token, setTasks, setFilteredTasks, search, loading]);
 
   return (
     <Container>
-      <Search setSearch={setSearch} />
+      <Search />
       <Table>
         <thead>
           <tr>

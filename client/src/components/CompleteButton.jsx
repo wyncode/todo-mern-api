@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import swal from 'sweetalert';
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
 const CompleteButton = ({ task }) => {
+  const { setLoading } = useContext(AuthContext);
   const token = localStorage.getItem('token');
 
   const toggleComplete = async () => {
+    setLoading(true);
     try {
       const response = await axios({
         method: 'PATCH',
@@ -15,6 +18,7 @@ const CompleteButton = ({ task }) => {
         data: { completed: !task.completed }
       });
       swal('Updated', 'Your task has been updated!', 'success');
+      setLoading(false);
       console.log(response);
     } catch (error) {
       console.log(`Update Error: `, error);
