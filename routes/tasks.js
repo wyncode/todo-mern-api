@@ -12,7 +12,7 @@ const express = require('express'),
 // /tasks?sortBy=dueDate:desc
 // ***********************************************//
 router.get(
-  '/tasks',
+  '/api/tasks',
   passport.authenticate('mern', {
     session: false
   }),
@@ -50,7 +50,7 @@ router.get(
 // Get a specific task
 // ***********************************************//
 router.get(
-  '/tasks/:id',
+  '/api/tasks/:id',
   passport.authenticate('mern', {
     session: false
   }),
@@ -75,7 +75,7 @@ router.get(
 // Create a task
 // ***********************************************//
 router.post(
-  '/tasks',
+  '/api/tasks',
   passport.authenticate('mern', {
     session: false
   }),
@@ -97,7 +97,7 @@ router.post(
 // Update a task
 // ***********************************************//
 router.patch(
-  '/tasks/:id',
+  '/api/tasks/:id',
   passport.authenticate('mern', {
     session: false
   }),
@@ -131,7 +131,7 @@ router.patch(
 // Delete a task
 // ***********************************************//
 router.delete(
-  '/tasks/:id',
+  '/api/tasks/:id',
   passport.authenticate('mern', {
     session: false
   }),
