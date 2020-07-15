@@ -7,7 +7,9 @@ const passport = require('passport'),
 // ******************************
 let jwtOptions = {
   jwtFromRequest: (req) => {
-    return req?.cookies?.jwt || ExtractJwt.fromAuthHeaderWithScheme('JWT')(req);
+    return (
+      req?.cookies?.jwt || ExtractJwt.fromAuthHeaderWithScheme('mern')(req)
+    );
   },
   secretOrKey: process.env.JWT_SECRET
 };
