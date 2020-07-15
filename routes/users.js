@@ -1,11 +1,10 @@
-const express = require('express');
-const router = new express.Router();
-const User = require('../models/user');
-const auth = require('../middleware/auth.js');
-const multer = require('multer');
-const bcrypt = require('bcryptjs');
-const sharp = require('sharp');
-const {
+const express = require('express'),
+  router = new express.Router(),
+  User = require('../models/user'),
+  multer = require('multer'),
+  bcrypt = require('bcryptjs'),
+  sharp = require('sharp'),
+  {
     sendWelcomeEmail,
     sendCancellationEmail,
     forgotPasswordEmail
@@ -14,9 +13,8 @@ const {
 
 router.get(
   '/passport',
-  passport.authenticate('jwt', {
-    session: false,
-    failureRedirect: '/login'
+  passport.authenticate('mern', {
+    session: false
   }),
   async (req, res) => {
     try {
@@ -95,8 +93,7 @@ router.post('/api/users/login', async (req, res) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
-
-    res.cookie('jwt', token, {
+    res.cookie('mern', token, {
       httpOnly: true,
       sameSite: 'Strict'
     });
@@ -106,7 +103,7 @@ router.post('/api/users/login', async (req, res) => {
   }
 });
 
-router.post('/api/loginCheck', auth, async (req, res) => {
+router.post('/api/loginCheck', async (req, res) => {
   try {
     res.json({ success: true });
   } catch (e) {
@@ -117,12 +114,13 @@ router.post('/api/loginCheck', auth, async (req, res) => {
 // ***********************************************//
 // Logout a user
 // ***********************************************//
-router.post('/api/users/logout', auth, async (req, res) => {
+router.post('/api/users/logout', async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
     });
     await req.user.save();
+    res.clearCookie('mern');
     res.send({ message: 'Logged out!' });
   } catch (e) {
     res.status(500).send();
@@ -132,10 +130,11 @@ router.post('/api/users/logout', auth, async (req, res) => {
 // ***********************************************//
 // Logout all devices
 // ***********************************************//
-router.post('/api/users/logoutAll', auth, async (req, res) => {
+router.post('/api/users/logoutAll', async (req, res) => {
   try {
     req.user.tokens = [];
     await req.user.save();
+    res.clearCookie('mern');
     res.send();
   } catch (e) {
     res.status(500).send();
@@ -145,30 +144,42 @@ router.post('/api/users/logoutAll', auth, async (req, res) => {
 // Get current user
 // ***********************************************//
 
-router.get('/api/users/me', auth, async (req, res) => {
-  res.send(req.user);
-});
+router.get(
+  '/api/users/me',
+  passport.authenticate('mern', {
+    session: false
+  }),
+  async (req, res) => {
+    res.send(req.user);
+  }
+);
 
 // ***********************************************//
 // Update a user
 // ***********************************************//
-router.patch('/api/users/me', auth, async (req, res) => {
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ['name', 'email', 'password', 'age'];
-  const isValidOperation = updates.every((update) =>
-    allowedUpdates.includes(update)
-  );
-  if (!isValidOperation) {
-    return res.status(400).send({ error: 'Invalid updates!' });
+router.patch(
+  '/api/users/me',
+  passport.authenticate('mern', {
+    session: false
+  }),
+  async (req, res) => {
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['name', 'email', 'password', 'age'];
+    const isValidOperation = updates.every((update) =>
+      allowedUpdates.includes(update)
+    );
+    if (!isValidOperation) {
+      return res.status(400).send({ error: 'Invalid updates!' });
+    }
+    try {
+      updates.forEach((update) => (req.user[update] = req.body[update]));
+      await req.user.save();
+      res.send(req.user);
+    } catch (e) {
+      res.status(400).send(e);
+    }
   }
-  try {
-    updates.forEach((update) => (req.user[update] = req.body[update]));
-    await req.user.save();
-    res.send(req.user);
-  } catch (e) {
-    res.status(400).send(e);
-  }
-});
+);
 
 // ***********************************************//
 // Upload a user avatar
@@ -187,8 +198,10 @@ const upload = multer({
 
 router.post(
   '/api/users/me/avatar',
-  auth,
   upload.single('avatar'),
+  passport.authenticate('mern', {
+    session: false
+  }),
   async (req, res) => {
     const buffer = await sharp(req.file.buffer)
       .resize({
@@ -210,39 +223,57 @@ router.post(
 // ***********************************************//
 // Delete a user's avatar
 // ***********************************************//
-router.delete('/api/users/me/avatar', auth, async (req, res) => {
-  req.user.avatar = undefined;
-  await req.user.save();
-  res.send();
-});
+router.delete(
+  '/api/users/me/avatar',
+  passport.authenticate('mern', {
+    session: false
+  }),
+  async (req, res) => {
+    req.user.avatar = undefined;
+    await req.user.save();
+    res.send();
+  }
+);
 
 // ***********************************************//
 // Serve a user's avatar
 // ***********************************************//
-router.get('/api/users/:id/avatar', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user || !user.avatar) {
-      throw new Error();
+router.get(
+  '/api/users/:id/avatar',
+  passport.authenticate('mern', {
+    session: false
+  }),
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user || !user.avatar) {
+        throw new Error();
+      }
+      res.set('Content-Type', 'image/png');
+      res.send(user.avatar);
+    } catch (e) {
+      res.status(404).send();
     }
-    res.set('Content-Type', 'image/png');
-    res.send(user.avatar);
-  } catch (e) {
-    res.status(404).send();
   }
-});
+);
 
 // ***********************************************//
 // Delete a user
 // ***********************************************//
-router.delete('/api/users/me', auth, async (req, res) => {
-  try {
-    await req.user.remove();
-    sendCancellationEmail(req.user.email, req.user.name);
-    res.send(req.user);
-  } catch (e) {
-    res.status(500).send();
+router.delete(
+  '/api/users/me',
+  passport.authenticate('mern', {
+    session: false
+  }),
+  async (req, res) => {
+    try {
+      await req.user.remove();
+      sendCancellationEmail(req.user.email, req.user.name);
+      res.send(req.user);
+    } catch (e) {
+      res.status(500).send();
+    }
   }
-});
+);
 
 module.exports = router;
