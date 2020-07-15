@@ -6,16 +6,32 @@ const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const sharp = require('sharp');
 const {
-  sendWelcomeEmail,
-  sendCancellationEmail,
-  forgotPasswordEmail
-} = require('../emails/account');
+    sendWelcomeEmail,
+    sendCancellationEmail,
+    forgotPasswordEmail
+  } = require('../emails/account'),
+  passport = require('../middleware/passport');
+
+router.get(
+  '/passport',
+  passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/login'
+  }),
+  async (req, res) => {
+    try {
+      res.json({ message: req.user });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
 
 // ***********************************************//
 // Reset Password
 // ***********************************************//
 
-router.get('/users/password/reset', async (req, res) => {
+router.get('/api/users/password/reset', async (req, res) => {
   let newPassword = await bcrypt.hash(req.query.password, 8);
   const update = { password: newPassword };
   const filter = { email: req.query.email };
@@ -40,7 +56,7 @@ router.get('/users/password/reset', async (req, res) => {
 // Reset Password Email Request
 // ***********************************************//
 
-router.get('/users/password/forgot', async (req, res) => {
+router.get('/api/users/password/forgot', async (req, res) => {
   try {
     const user = await User.findOne({
       email: req.query.email
@@ -57,7 +73,7 @@ router.get('/users/password/forgot', async (req, res) => {
 // Create a user
 // ***********************************************//
 
-router.post('/users', async (req, res) => {
+router.post('/api/users', async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
@@ -72,14 +88,27 @@ router.post('/users', async (req, res) => {
 // ***********************************************//
 // Login a user
 // ***********************************************//
-router.post('/users/login', async (req, res) => {
+router.post('/api/users/login', async (req, res) => {
   try {
     const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
     const token = await user.generateAuthToken();
-    res.send({ user, token });
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'Strict'
+    });
+    res.send({ user });
+  } catch (e) {
+    res.status(400).send();
+  }
+});
+
+router.post('/api/loginCheck', auth, async (req, res) => {
+  try {
+    res.json({ success: true });
   } catch (e) {
     res.status(400).send();
   }
@@ -88,7 +117,7 @@ router.post('/users/login', async (req, res) => {
 // ***********************************************//
 // Logout a user
 // ***********************************************//
-router.post('/users/logout', auth, async (req, res) => {
+router.post('/api/users/logout', auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
@@ -103,7 +132,7 @@ router.post('/users/logout', auth, async (req, res) => {
 // ***********************************************//
 // Logout all devices
 // ***********************************************//
-router.post('/users/logoutAll', auth, async (req, res) => {
+router.post('/api/users/logoutAll', auth, async (req, res) => {
   try {
     req.user.tokens = [];
     await req.user.save();
@@ -116,14 +145,14 @@ router.post('/users/logoutAll', auth, async (req, res) => {
 // Get current user
 // ***********************************************//
 
-router.get('/users/me', auth, async (req, res) => {
+router.get('/api/users/me', auth, async (req, res) => {
   res.send(req.user);
 });
 
 // ***********************************************//
 // Update a user
 // ***********************************************//
-router.patch('/users/me', auth, async (req, res) => {
+router.patch('/api/users/me', auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['name', 'email', 'password', 'age'];
   const isValidOperation = updates.every((update) =>
@@ -157,7 +186,7 @@ const upload = multer({
 });
 
 router.post(
-  '/users/me/avatar',
+  '/api/users/me/avatar',
   auth,
   upload.single('avatar'),
   async (req, res) => {
@@ -181,7 +210,7 @@ router.post(
 // ***********************************************//
 // Delete a user's avatar
 // ***********************************************//
-router.delete('/users/me/avatar', auth, async (req, res) => {
+router.delete('/api/users/me/avatar', auth, async (req, res) => {
   req.user.avatar = undefined;
   await req.user.save();
   res.send();
@@ -190,7 +219,7 @@ router.delete('/users/me/avatar', auth, async (req, res) => {
 // ***********************************************//
 // Serve a user's avatar
 // ***********************************************//
-router.get('/users/:id/avatar', async (req, res) => {
+router.get('/api/users/:id/avatar', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user || !user.avatar) {
@@ -206,7 +235,7 @@ router.get('/users/:id/avatar', async (req, res) => {
 // ***********************************************//
 // Delete a user
 // ***********************************************//
-router.delete('/users/me', auth, async (req, res) => {
+router.delete('/api/users/me', auth, async (req, res) => {
   try {
     await req.user.remove();
     sendCancellationEmail(req.user.email, req.user.name);
