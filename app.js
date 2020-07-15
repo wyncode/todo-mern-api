@@ -19,3 +19,5 @@ app.use(userRouter);
 app.use(taskRouter);
 
 module.exports = app;
+
+// TODO refactor routes to unauthorized and authorized routes so we can add passport in only one place instead of at each route.
