@@ -17,8 +17,8 @@ const TaskForm = () => {
     try {
       const response = await axios({
         method: 'POST',
-        url: '/tasks',
-        headers: { Authorization: `Bearer ${token}` },
+        url: '/api/tasks',
+        withCredentials: true,
         data: taskData
       });
       swal('New Task!', 'You task has been added!', 'success');

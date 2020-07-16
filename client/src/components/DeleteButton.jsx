@@ -22,8 +22,8 @@ const DeleteButton = ({ id }) => {
         try {
           const response = await axios({
             method: 'DELETE',
-            headers: { Authorization: `Bearer ${token}` },
-            url: `/tasks/${id}`
+            url: `/api/tasks/${id}`,
+            withCredentials: true
           });
           swal('Poof! Your task has been deleted!', {
             icon: 'success'

@@ -56,6 +56,7 @@ const Login = ({ history }) => {
           </Button>
         </Form.Group>
       </Form>
+      <Link to="/reset-password">Forgot Password?</Link>
       <Link className="mt-4" to="/signup">
         Need an Account? Sign up.
       </Link>

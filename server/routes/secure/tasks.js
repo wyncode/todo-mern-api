@@ -12,8 +12,7 @@ Task = require('../../db/models/task');
 // ***********************************************//
 router.get('/api/tasks', async (req, res) => {
   const match = {},
-    sort = {},
-    user = await User.findById(req.user._id);
+    sort = {};
 
   if (req.query.completed) {
     match.completed = req.query.completed === 'true';
@@ -34,7 +33,7 @@ router.get('/api/tasks', async (req, res) => {
         }
       })
       .execPopulate();
-    res.send(user.tasks);
+    res.send(req.user.tasks);
   } catch (e) {
     res.status(500).send();
   }

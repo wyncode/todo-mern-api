@@ -6,7 +6,6 @@ import Search from './Search';
 import { AuthContext } from '../context/AuthContext';
 
 const TaskList = () => {
-  const token = localStorage.getItem('token');
   const {
     setTasks,
     search,
@@ -19,9 +18,10 @@ const TaskList = () => {
   useEffect(() => {
     axios
       .get('/api/tasks?sortBy=dueDate:asc', {
-        headers: { 'Content-Type': 'application/json' }
+        withCredentials: true
       })
       .then((response) => {
+        console.log(response.data);
         setTasks(response.data);
         setFilteredTasks(response.data);
       })
@@ -29,7 +29,7 @@ const TaskList = () => {
         console.log(`Tasks Request Error: `, error);
       });
     // when setTasks, setFilteredTasks, and search values are changed, it will rerender.
-  }, [token, setTasks, setFilteredTasks, search, loading]);
+  }, [setTasks, setFilteredTasks, search, loading]);
 
   return (
     <Container>
