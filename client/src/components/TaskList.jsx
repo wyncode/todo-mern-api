@@ -6,7 +6,6 @@ import Search from './Search';
 import { AuthContext } from '../context/AuthContext';
 
 const TaskList = () => {
-  const token = localStorage.getItem('token');
   const {
     setTasks,
     search,
@@ -18,20 +17,18 @@ const TaskList = () => {
   // initital render will set all the todos to the `tasks` state
   useEffect(() => {
     axios
-      .get('/tasks?sortBy=dueDate:asc', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      .get('/api/tasks?sortBy=dueDate:asc', {
+        withCredentials: true
       })
       .then((response) => {
         setTasks(response.data);
         setFilteredTasks(response.data);
       })
       .catch((error) => {
-        console.log(`Tasks Request Error: `, error);
+        console.log(`Tasks Request Error: `, error); // TODO handle this better
       });
     // when setTasks, setFilteredTasks, and search values are changed, it will rerender.
-  }, [token, setTasks, setFilteredTasks, search, loading]);
+  }, [setTasks, setFilteredTasks, search, loading]);
 
   return (
     <Container>

@@ -12,8 +12,8 @@ const Logout = () => {
     try {
       const response = await axios({
         method: 'POST',
-        url: '/users/logout',
-        headers: { Authorization: `Bearer ${token}` }
+        url: '/api/users/logout',
+        withCredentials: true
       });
       localStorage.removeItem('token');
       setCurrentUser(null);

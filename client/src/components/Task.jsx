@@ -5,8 +5,9 @@ import DeleteButton from './DeleteButton';
 import { AuthContext } from '../context/AuthContext';
 
 const Task = ({ tasks }) => {
+  console.log('tasks', tasks);
   const { search } = useContext(AuthContext);
-  const filteredTasks = tasks.filter((task) => {
+  const filteredTasks = tasks?.filter((task) => {
     return task.description.toLowerCase().includes(search.toLowerCase());
   });
 
