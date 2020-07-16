@@ -11,7 +11,6 @@ Task = require('../../db/models/task');
 // /tasks?sortBy=dueDate:desc
 // ***********************************************//
 router.get('/api/tasks', async (req, res) => {
-  console.log('ello', req.user);
   const match = {},
     sort = {},
     user = await User.findById(req.user._id);
