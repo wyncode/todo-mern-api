@@ -8,7 +8,8 @@
     "dev": "nodemon server.js",
     "test": "jest --watchAll --runInBand  --setupFiles dotenv/config",
     "db:reset": "node db/seeds.js",
-    "prettier": "prettier '*/**/*.js' --write"
+    "prettier": "prettier '*/**/*.js' --write",
+    "heroku-postbuild": "cd client && yarn && yarn run build"
   },
   "jest": {
     "testEnvironment": "node"

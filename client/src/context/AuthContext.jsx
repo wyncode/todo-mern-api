@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     if (!currentUser) {
       axios
         .get(`/api/users/me`, {
-          headers: { 'Content-Type': 'application/json' }
+          withCredentials: true
         })
         .then(({ data }) => {
           setCurrentUser(data);
