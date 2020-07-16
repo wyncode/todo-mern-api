@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
           withCredentials: true
         })
         .then(({ data }) => {
-          console.log(data);
           setCurrentUser(data);
         })
         .catch((error) => console.error(error));
