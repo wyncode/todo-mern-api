@@ -1,5 +1,6 @@
 const router = require('express').Router(),
   { forgotPasswordEmail } = require('../../emails'),
+  User = require('../../models/user'),
   bcrypt = require('bcryptjs');
 
 // ***********************************************//
