@@ -9,21 +9,7 @@ const express = require('express'),
     sendCancellationEmail,
     forgotPasswordEmail
   } = require('../emails/account'),
-  passport = require('../middleware/passport');
-
-router.get(
-  '/passport',
-  passport.authenticate('mern', {
-    session: false
-  }),
-  async (req, res) => {
-    try {
-      res.json({ message: req.user });
-    } catch (e) {
-      console.log(e);
-    }
-  }
-);
+  passport = require('../middleware/authentication/passport');
 
 // ***********************************************//
 // Reset Password
@@ -93,7 +79,7 @@ router.post('/api/users/login', async (req, res) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
-    res.cookie('mern', token, {
+    res.cookie('jwt', token, {
       httpOnly: true,
       sameSite: 'Strict'
     });
@@ -120,7 +106,7 @@ router.post('/api/users/logout', async (req, res) => {
       return token.token !== req.token;
     });
     await req.user.save();
-    res.clearCookie('mern');
+    res.clearCookie('jwt');
     res.send({ message: 'Logged out!' });
   } catch (e) {
     res.status(500).send();
@@ -134,7 +120,7 @@ router.post('/api/users/logoutAll', async (req, res) => {
   try {
     req.user.tokens = [];
     await req.user.save();
-    res.clearCookie('mern');
+    res.clearCookie('jwt');
     res.send();
   } catch (e) {
     res.status(500).send();
@@ -146,7 +132,7 @@ router.post('/api/users/logoutAll', async (req, res) => {
 
 router.get(
   '/api/users/me',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -159,7 +145,7 @@ router.get(
 // ***********************************************//
 router.patch(
   '/api/users/me',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -199,7 +185,7 @@ const upload = multer({
 router.post(
   '/api/users/me/avatar',
   upload.single('avatar'),
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -225,7 +211,7 @@ router.post(
 // ***********************************************//
 router.delete(
   '/api/users/me/avatar',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -240,7 +226,7 @@ router.delete(
 // ***********************************************//
 router.get(
   '/api/users/:id/avatar',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -262,7 +248,7 @@ router.get(
 // ***********************************************//
 router.delete(
   '/api/users/me',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {

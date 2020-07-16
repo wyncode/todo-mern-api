@@ -1,7 +1,7 @@
 const express = require('express'),
   router = new express.Router(),
   mongoose = require('mongoose'),
-  passport = require('../middleware/passport'),
+  passport = require('../middleware/authentication/passport'),
   Task = require('../models/task');
 
 // ***********************************************//
@@ -13,7 +13,7 @@ const express = require('express'),
 // ***********************************************//
 router.get(
   '/api/tasks',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -51,7 +51,7 @@ router.get(
 // ***********************************************//
 router.get(
   '/api/tasks/:id',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -76,7 +76,7 @@ router.get(
 // ***********************************************//
 router.post(
   '/api/tasks',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -98,7 +98,7 @@ router.post(
 // ***********************************************//
 router.patch(
   '/api/tasks/:id',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
@@ -132,7 +132,7 @@ router.patch(
 // ***********************************************//
 router.delete(
   '/api/tasks/:id',
-  passport.authenticate('mern', {
+  passport.authenticate('jwt', {
     session: false
   }),
   async (req, res) => {
