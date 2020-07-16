@@ -15,9 +15,7 @@ const Login = ({ history }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/users/login', formData);
-      const token = await response.data.token;
-      localStorage.setItem('token', token);
+      const response = await axios.post('/api/users/login', formData);
       setCurrentUser(await response.data.user);
       history.push('/');
     } catch (error) {

@@ -18,10 +18,8 @@ const TaskList = () => {
   // initital render will set all the todos to the `tasks` state
   useEffect(() => {
     axios
-      .get('/tasks?sortBy=dueDate:asc', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      .get('/api/tasks?sortBy=dueDate:asc', {
+        headers: { 'Content-Type': 'application/json' }
       })
       .then((response) => {
         setTasks(response.data);

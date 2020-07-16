@@ -8,14 +8,14 @@ const passport = require('passport'),
 let jwtOptions = {
   jwtFromRequest: (req) => {
     return (
-      req?.cookies?.jwt || ExtractJwt.fromAuthHeaderWithScheme('mern')(req)
+      req?.cookies?.mern || ExtractJwt.fromAuthHeaderWithScheme('mern')(req)
     );
   },
   secretOrKey: process.env.JWT_SECRET
 };
 
 passport.use(
-  'mern',
+  'jwt',
   new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
     if (Date.now() > jwtPayload.expires) {
       return done(null, false, { message: 'jwt expired' });

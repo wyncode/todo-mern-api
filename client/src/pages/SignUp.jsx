@@ -15,7 +15,7 @@ const SignUp = ({ history }) => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/users', formData);
+      const response = await axios.post('/api/users', formData);
       const token = response.data.token;
       localStorage.setItem('token', token);
       setIsLoggedIn(true);

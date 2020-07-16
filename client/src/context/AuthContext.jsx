@@ -10,22 +10,20 @@ export const AuthProvider = ({ children }) => {
   const [currentFilter, setCurrentFilter] = useState(null);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     // incase user refreshes local session is cleared.
-    if (token && !currentUser) {
+    if (!currentUser) {
       axios
-        .get(`/users/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+        .get(`/api/users/me`, {
+          headers: { 'Content-Type': 'application/json' }
         })
         .then(({ data }) => {
           setCurrentUser(data);
-        });
+        })
+        .catch((error) => console.error(error));
     }
-  }, [token, currentUser]);
+  }, [currentUser]);
 
   return (
     <AuthContext.Provider
