@@ -1,8 +1,7 @@
 const express = require('express'),
   router = new express.Router(),
-  User = require('../../models/user'),
+  User = require('../../db/models/user'),
   multer = require('multer'),
-  bcrypt = require('bcryptjs'),
   sharp = require('sharp'),
   {
     sendWelcomeEmail,

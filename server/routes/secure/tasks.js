@@ -1,6 +1,7 @@
 const router = require('express').Router(),
   mongoose = require('mongoose'),
-  Task = require('../../models/task');
+  User = require('../../db/models/user');
+Task = require('../../db/models/task');
 
 // ***********************************************//
 // Get all tasks
@@ -10,8 +11,11 @@ const router = require('express').Router(),
 // /tasks?sortBy=dueDate:desc
 // ***********************************************//
 router.get('/api/tasks', async (req, res) => {
-  const match = {};
-  const sort = {};
+  console.log('ello', req.user);
+  const match = {},
+    sort = {},
+    user = await User.findById(req.user._id);
+
   if (req.query.completed) {
     match.completed = req.query.completed === 'true';
   }
@@ -19,9 +23,8 @@ router.get('/api/tasks', async (req, res) => {
     const parts = req.query.sortBy.split(':');
     sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
   }
-
   try {
-    await req.user
+    await user
       .populate({
         path: 'tasks',
         match,
@@ -32,7 +35,8 @@ router.get('/api/tasks', async (req, res) => {
         }
       })
       .execPopulate();
-    res.send(req.user.tasks);
+    console.log(user.tasks);
+    res.send(user.tasks);
   } catch (e) {
     res.status(500).send();
   }

@@ -1,5 +1,5 @@
 // import db
-require('./db');
+require('./db/config');
 
 const express = require('express'),
   // import routes
