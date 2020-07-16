@@ -2,7 +2,8 @@ const { USER_ACCESS_LEVELS } = require('../../../constants');
 
 const isAdmin = () => {
   return async (req, res, next) => {
-    if (!req.user?.admin) res.status(401).json({ error: 'Access denied' });
+    if (!req.user?.admin)
+      return res.status(401).json({ error: 'Access denied' });
     next();
   };
 };
