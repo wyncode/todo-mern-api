@@ -1,8 +1,7 @@
-const express = require('express'),
-  router = new express.Router(),
+const router = require('express').Router(),
   mongoose = require('mongoose'),
-  passport = require('../middleware/authentication/passport'),
-  Task = require('../models/task');
+  passport = require('../../middleware/authentication'),
+  Task = require('../../models/task');
 
 // ***********************************************//
 // Get all tasks
