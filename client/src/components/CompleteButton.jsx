@@ -13,8 +13,8 @@ const CompleteButton = ({ task }) => {
     try {
       const response = await axios({
         method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` },
-        url: `/tasks/${task._id}`,
+        url: `/api/tasks/${task._id}`,
+        withCredentials: true,
         data: { completed: !task.completed }
       });
       swal('Updated', 'Your task has been updated!', 'success');

@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
-const app = require('./app');
+const app = require('./server/app');
 const port = process.env.PORT || 8080;
 
 // Uncomment this code to put your site down for maintenance.

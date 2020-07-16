@@ -5,6 +5,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import ResetPassword from './pages/ResetPassword';
 import Navigation from './components/Navigation';
 import './App.css';
 
@@ -16,6 +17,7 @@ function App() {
         <Switch>
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/reset-password" component={ResetPassword} />
           <PrivateRoute exact path="/" component={Home} />
         </Switch>
       </BrowserRouter>
