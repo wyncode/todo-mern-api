@@ -21,12 +21,11 @@ const TaskList = () => {
         withCredentials: true
       })
       .then((response) => {
-        console.log(response.data);
         setTasks(response.data);
         setFilteredTasks(response.data);
       })
       .catch((error) => {
-        console.log(`Tasks Request Error: `, error);
+        console.log(`Tasks Request Error: `, error); // TODO handle this better
       });
     // when setTasks, setFilteredTasks, and search values are changed, it will rerender.
   }, [setTasks, setFilteredTasks, search, loading]);
