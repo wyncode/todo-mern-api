@@ -120,7 +120,7 @@ router.post(
 // Delete a user's avatar
 // ***********************************************//
 router.delete('/api/users/me/avatar', async (req, res) => {
-  req.user.avatar = undefined;
+  req.user.avatar = null;
   await req.user.save();
   res.send();
 });
