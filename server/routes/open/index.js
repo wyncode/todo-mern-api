@@ -17,7 +17,7 @@ router.post('/api/users/login', async (req, res) => {
       httpOnly: true,
       sameSite: 'Strict'
     });
-    res.send({ user });
+    res.json(user);
   } catch (e) {
     res.status(400).send();
   }
@@ -32,7 +32,7 @@ router.post('/api/users', async (req, res) => {
     await user.save();
     sendWelcomeEmail(user.email, user.name);
     const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
+    res.status(201).json({ user, token });
   } catch (e) {
     res.status(400).send(e);
   }
@@ -70,9 +70,8 @@ router.get('/api/users/password/forgot', async (req, res) => {
     const user = await User.findOne({
       email: req.query.email
     });
-
     forgotPasswordEmail(user.email, user.tokens[0].token, req.query.password);
-    res.status(200).send();
+    res.json();
   } catch (e) {
     res.status(400).send(e.toString());
   }
