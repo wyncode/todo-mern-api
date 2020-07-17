@@ -8,7 +8,7 @@ const express = require('express'),
 // ***********************************************//
 // Login Check
 // ***********************************************//
-router.post('/api/loginCheck', async (req, res) => res.json());
+router.post('/api/loginCheck', async (req, res) => res.sendStatus(200));
 
 // ***********************************************//
 // Logout a user
@@ -108,7 +108,7 @@ router.post(
 router.delete('/api/users/me/avatar', async (req, res) => {
   req.user.avatar = null;
   await req.user.save();
-  res.json();
+  res.sendStatus(200);
 });
 
 // ***********************************************//
@@ -123,7 +123,7 @@ router.get('/api/users/:id/avatar', async (req, res) => {
     res.set('Content-Type', 'image/png');
     res.json(user.avatar);
   } catch (e) {
-    res.status(404).send();
+    res.sendStatus(404);
   }
 });
 
@@ -136,7 +136,7 @@ router.delete('/api/users/me', async (req, res) => {
     sendCancellationEmail(req.user.email, req.user.name);
     res.json(req.user);
   } catch (e) {
-    res.status(500).send();
+    res.sendStatus(500);
   }
 });
 
