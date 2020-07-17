@@ -3,19 +3,12 @@ const express = require('express'),
   User = require('../../db/models/user'),
   multer = require('multer'),
   sharp = require('sharp'),
-  {
-    sendWelcomeEmail,
-    sendCancellationEmail,
-    forgotPasswordEmail
-  } = require('../../emails');
+  { sendCancellationEmail } = require('../../emails');
 
-router.post('/api/loginCheck', async (req, res) => {
-  try {
-    res.json({ success: true });
-  } catch (e) {
-    res.status(400).send();
-  }
-});
+// ***********************************************//
+// Login Check
+// ***********************************************//
+router.post('/api/loginCheck', async (req, res) => res.sendStatus(200));
 
 // ***********************************************//
 // Logout a user
@@ -27,7 +20,7 @@ router.post('/api/users/logout', async (req, res) => {
     });
     await req.user.save();
     res.clearCookie('jwt');
-    res.send({ message: 'Logged out!' });
+    res.json({ message: 'Logged out!' });
   } catch (e) {
     res.status(500).send();
   }
@@ -41,7 +34,7 @@ router.post('/api/users/logoutAll', async (req, res) => {
     req.user.tokens = [];
     await req.user.save();
     res.clearCookie('jwt');
-    res.send();
+    res.sendStatus(200);
   } catch (e) {
     res.status(500).send();
   }
@@ -51,33 +44,28 @@ router.post('/api/users/logoutAll', async (req, res) => {
 // ***********************************************//
 
 router.get('/api/users/me', async (req, res) => {
-  res.send(req.user);
+  res.json(req.user);
 });
 
 // ***********************************************//
 // Update a user
 // ***********************************************//
-router.patch(
-  '/api/users/me',
-
-  async (req, res) => {
-    const updates = Object.keys(req.body);
-    const allowedUpdates = ['name', 'email', 'password', 'age'];
-    const isValidOperation = updates.every((update) =>
-      allowedUpdates.includes(update)
-    );
-    if (!isValidOperation) {
-      return res.status(400).send({ error: 'Invalid updates!' });
-    }
-    try {
-      updates.forEach((update) => (req.user[update] = req.body[update]));
-      await req.user.save();
-      res.send(req.user);
-    } catch (e) {
-      res.status(400).send(e);
-    }
+router.patch('/api/users/me', async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['name', 'email', 'password', 'age'];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation)
+    return res.status(400).send({ error: 'Invalid updates!' });
+  try {
+    updates.forEach((update) => (req.user[update] = req.body[update]));
+    await req.user.save();
+    res.json(req.user);
+  } catch (e) {
+    res.status(400).send(e);
   }
-);
+});
 
 // ***********************************************//
 // Upload a user avatar
@@ -105,13 +93,12 @@ router.post(
       })
       .png()
       .toBuffer();
-
     req.user.avatar = buffer;
     await req.user.save();
     res.send();
   },
   (error, req, res, next) => {
-    res.status(400).send({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 );
 
@@ -121,7 +108,7 @@ router.post(
 router.delete('/api/users/me/avatar', async (req, res) => {
   req.user.avatar = null;
   await req.user.save();
-  res.send();
+  res.sendStatus(200);
 });
 
 // ***********************************************//
@@ -134,9 +121,9 @@ router.get('/api/users/:id/avatar', async (req, res) => {
       throw new Error();
     }
     res.set('Content-Type', 'image/png');
-    res.send(user.avatar);
+    res.json(user.avatar);
   } catch (e) {
-    res.status(404).send();
+    res.sendStatus(404);
   }
 });
 
@@ -147,9 +134,9 @@ router.delete('/api/users/me', async (req, res) => {
   try {
     await req.user.remove();
     sendCancellationEmail(req.user.email, req.user.name);
-    res.send(req.user);
+    res.json(req.user);
   } catch (e) {
-    res.status(500).send();
+    res.sendStatus(500);
   }
 });
 
