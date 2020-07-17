@@ -2,15 +2,13 @@ const express = require('express'),
   router = new express.Router(),
   User = require('../../db/models/user'),
   multer = require('multer'),
-  sharp = require('sharp')  { sendCancellationEmail } = require('../../emails');
+  sharp = require('sharp'),
+  { sendCancellationEmail } = require('../../emails');
 
-router.post('/api/loginCheck', async (req, res) => {
-  try {
-    res.json({ success: true });
-  } catch (e) {
-    res.status(400).send();
-  }
-});
+// ***********************************************//
+// Login Check
+// ***********************************************//
+router.post('/api/loginCheck', async (req, res) => res.json());
 
 // ***********************************************//
 // Logout a user
@@ -36,7 +34,7 @@ router.post('/api/users/logoutAll', async (req, res) => {
     req.user.tokens = [];
     await req.user.save();
     res.clearCookie('jwt');
-    res.json();
+    res.sendStatus(200);
   } catch (e) {
     res.status(500).send();
   }
@@ -52,27 +50,22 @@ router.get('/api/users/me', async (req, res) => {
 // ***********************************************//
 // Update a user
 // ***********************************************//
-router.patch(
-  '/api/users/me',
-
-  async (req, res) => {
-    const updates = Object.keys(req.body);
-    const allowedUpdates = ['name', 'email', 'password', 'age'];
-    const isValidOperation = updates.every((update) =>
-      allowedUpdates.includes(update)
-    );
-    if (!isValidOperation) {
-      return res.status(400).send({ error: 'Invalid updates!' });
-    }
-    try {
-      updates.forEach((update) => (req.user[update] = req.body[update]));
-      await req.user.save();
-      res.json(req.user);
-    } catch (e) {
-      res.status(400).send(e);
-    }
+router.patch('/api/users/me', async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['name', 'email', 'password', 'age'];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation)
+    return res.status(400).send({ error: 'Invalid updates!' });
+  try {
+    updates.forEach((update) => (req.user[update] = req.body[update]));
+    await req.user.save();
+    res.json(req.user);
+  } catch (e) {
+    res.status(400).send(e);
   }
-);
+});
 
 // ***********************************************//
 // Upload a user avatar
@@ -100,7 +93,6 @@ router.post(
       })
       .png()
       .toBuffer();
-
     req.user.avatar = buffer;
     await req.user.save();
     res.send();
