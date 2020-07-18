@@ -20,11 +20,7 @@ passport.use(
       return done(null, false, { message: 'jwt expired' });
     }
     let { iat, exp, ...userData } = jwtPayload;
-    user = await User.findById(userData._id);
-    user = user.toObject();
-    delete user.password;
-    delete user.tokens;
-    userData = user;
+    userData = await User.findById(userData._id); // TODO remove user password and tokens from this object
     return done(null, userData);
   })
 );
