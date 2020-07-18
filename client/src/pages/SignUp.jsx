@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
+import swal from 'sweetalert';
 import axios from 'axios';
 
 const SignUp = ({ history }) => {
@@ -22,7 +23,7 @@ const SignUp = ({ history }) => {
       setCurrentUser(response.data.user);
       history.push('/');
     } catch (error) {
-      console.log('SignUp Error: ', error);
+      swal('SignUp Error: ', error);
     }
   };
   return (

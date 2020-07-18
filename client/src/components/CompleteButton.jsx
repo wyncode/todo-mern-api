@@ -6,12 +6,11 @@ import { AuthContext } from '../context/AuthContext';
 
 const CompleteButton = ({ task }) => {
   const { setLoading } = useContext(AuthContext);
-  const token = localStorage.getItem('token');
 
   const toggleComplete = async () => {
     setLoading(true);
     try {
-      const response = await axios({
+      await axios({
         method: 'PATCH',
         url: `/api/tasks/${task._id}`,
         withCredentials: true,
@@ -19,9 +18,8 @@ const CompleteButton = ({ task }) => {
       });
       swal('Updated', 'Your task has been updated!', 'success');
       setLoading(false);
-      console.log(response);
     } catch (error) {
-      console.log(`Update Error: `, error);
+      swal(`Oops!`, error);
     }
   };
   return (
