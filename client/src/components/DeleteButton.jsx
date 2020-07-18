@@ -28,7 +28,7 @@ const DeleteButton = ({ id }) => {
             icon: 'success'
           });
           setLoading(false);
-        } catch (error) {}
+        } catch (error) {} // TODO handle this
       } else {
         swal('Your task is safe!');
       }
