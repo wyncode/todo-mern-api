@@ -1,17 +1,18 @@
 # Mern Todo API
 
-
 ## Requirements
- - [MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/) (quick install: install Homebrew and `run brew update && brew tap mongodb/brew && brew install mongodb-community@4.2`)
-   - `brew update`
-   - `brew tap mongodb/brew`
-   - `brew install mongodb-community@4.2`
+
+- [MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/) (quick install: install Homebrew and `run brew update && brew tap mongodb/brew && brew install mongodb-community@4.2`)
+  - `brew update`
+  - `brew tap mongodb/brew`
+  - `brew install mongodb-community@4.2`
+
 ## Setup
 
 - `git clone git@github.com:wyncode/todo-mern-api.git`
 - `cd todo-mern-api`
 - `yarn`
-- `cp sample.env .env`
+- `cp .env.sample .env`
 - Fill in the environment variables.
 - Reset and seed the database with `yarn db:reset`
 - `yarn dev`
