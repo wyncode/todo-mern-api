@@ -1,7 +1,6 @@
 const router = require('express').Router(),
   mongoose = require('mongoose'),
-  User = require('../../db/models/user');
-Task = require('../../db/models/task');
+  Task = require('../../db/models/task');
 
 // ***********************************************//
 // Get all tasks
