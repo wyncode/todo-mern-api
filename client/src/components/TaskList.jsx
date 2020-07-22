@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { Container, Table } from 'react-bootstrap';
+import swal from 'sweetalert';
 import axios from 'axios';
 import Task from './Task';
 import Search from './Search';
@@ -25,7 +26,7 @@ const TaskList = () => {
         setFilteredTasks(response.data);
       })
       .catch((error) => {
-        console.log(`Tasks Request Error: `, error); // TODO handle this better
+        swal(`Oops!`, error); // TODO handle this better
       });
     // when setTasks, setFilteredTasks, and search values are changed, it will rerender.
   }, [setTasks, setFilteredTasks, search, loading]);

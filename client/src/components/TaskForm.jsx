@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import swal from 'sweetalert';
+import { AuthContext } from '../context/AuthContext';
 
 const TaskForm = () => {
   const [taskData, setTaskData] = useState('');
-  const token = localStorage.getItem('token');
+  const { setLoading } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setTaskData({ ...taskData, [e.target.name]: e.target.value });
-    console.log('taskData', taskData);
   };
 
   const handleTaskSubmission = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
-      const response = await axios({
+      await axios({
         method: 'POST',
         url: '/api/tasks',
         withCredentials: true,
@@ -23,9 +24,9 @@ const TaskForm = () => {
       });
       swal('New Task!', 'You task has been added!', 'success');
       setTaskData({});
-      console.log(response);
+      setLoading(false);
     } catch (error) {
-      console.log('Add Task Error: ', error);
+      swal('Oops!', error);
     }
   };
   return (

@@ -6,7 +6,6 @@ import { AuthContext } from '../context/AuthContext';
 
 const DeleteButton = ({ id }) => {
   const { setLoading } = useContext(AuthContext);
-  const token = localStorage.getItem('token');
 
   const handleDelete = async () => {
     setLoading(true);
@@ -20,7 +19,7 @@ const DeleteButton = ({ id }) => {
       });
       if (willDelete) {
         try {
-          const response = await axios({
+          await axios({
             method: 'DELETE',
             url: `/api/tasks/${id}`,
             withCredentials: true
@@ -28,14 +27,13 @@ const DeleteButton = ({ id }) => {
           swal('Poof! Your task has been deleted!', {
             icon: 'success'
           });
-          console.log(response);
           setLoading(false);
-        } catch (error) {}
+        } catch (error) {} // TODO handle this
       } else {
         swal('Your task is safe!');
       }
     } catch (error) {
-      console.log('Delete Error', error);
+      swal('Oops!', error);
     }
   };
   return <Button onClick={handleDelete}>Delete</Button>;
