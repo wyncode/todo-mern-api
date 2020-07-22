@@ -1,5 +1,7 @@
 # Mern Todo API
 
+A MERN-stack API to handle To Do lists. Uses bryptjs and JWT for authentication.
+
 ## Requirements
 
 - [MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/) (quick install: install Homebrew and `run brew update && brew tap mongodb/brew && brew install mongodb-community@4.2`)
@@ -9,59 +11,55 @@
 
 ## Setup
 
-- `git clone git@github.com:wyncode/todo-mern-api.git`
-- `cd todo-mern-api`
-- `yarn`
-- `cp .env.sample .env`
-- Fill in the environment variables.
-- Reset and seed the database with `yarn db:reset`
-- `yarn dev`
+NOTE: A SendGrid API key is required for email notifications.
 
-## NPM Packages Used
+```
+$ git clone git@github.com:wyncode/todo-mern-api.git
+$ cd todo-mern-api
+$ yarn
+$ cp .env.sample .env
+```
 
-### Dependencies
+You will then need to fill in your environment variables in your `.env` file.
 
-- [@sendgrid/mail](https://sendgrid.com/docs/API_Reference/api_getting_started.html)(API Key Required)
-- [bcryptjs](https://github.com/dcodeIO/bcrypt.js/)
-- [cors](https://github.com/expressjs/cors#readme)
-- [express](https://expressjs.com/)
-- [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken#readme)
-- [mongodb](http://mongodb.github.io/node-mongodb-native/)
-- [mongoose](https://mongoosejs.com/)
-- [multer](https://github.com/expressjs/multer#readme)
-- [sharp](https://github.com/lovell/sharp)
-- [validator](https://github.com/validatorjs/validator.js)
+To reset and seed your database:
 
-### DevDependencies
+```
+$ yarn db:reset
+```
 
-- [dotenv](https://github.com/motdotla/dotenv#readme)
-- [jest](https://jestjs.io/)
-- [nodemon](https://github.com/remy/nodemon)
-- [prettier](https://prettier.io/)
-- [supertest](https://github.com/visionmedia/supertest#readme)
+To run your API in a local environment:
 
-## Run Test Suite
+```
+$ yarn dev
+```
 
-- `yarn test`
+To run the endpoint testing suites (using jest and supertest)
 
-### Format Code
+```
+$ yarn test
+```
 
-- `yarn prettier`
+To format your code
+
+```
+$ yarn prettier
+```
 
 ---
 
-Add collection to your Postman account.
-
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9736846b31eae2710b6c)
+Add collection to your Postman account for more in-depth API documentation: [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9736846b31eae2710b6c)
 
 ---
 
 ## Deployment
 
 ```
-heroku create
-heroku config:set JWT_SECRET=neverstoplearning
-heroku config:set MONGODB_URL=yourconnectionstring
-heroku config:set SENDGRID_API_KEY=yourapikey
-git push heroku master
+$ heroku create
+
+# replace value strings with your own values
+$ heroku config:set JWT_SECRET=neverstoplearning
+$ heroku config:set MONGODB_URL=yourconnectionstring
+$ heroku config:set SENDGRID_API_KEY=yourapikey
+$ git push heroku master
 ```
