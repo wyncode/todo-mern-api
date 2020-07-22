@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
+import swal from 'sweetalert';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
 const Login = ({ history }) => {
-  const { setCurrentUser, currentUser } = useContext(AuthContext);
+  const { setCurrentUser } = useContext(AuthContext);
   const [formData, setFormData] = useState(null);
 
   const handleChange = (e) => {
@@ -16,16 +17,14 @@ const Login = ({ history }) => {
     e.preventDefault();
     try {
       const response = await axios.post('/api/users/login', formData);
-      setCurrentUser(await response.data.user);
+      setCurrentUser(response.data);
+      // persists user if browser is refreshes.
+      sessionStorage.setItem('user', response.data);
       history.push('/');
     } catch (error) {
-      console.log('Login Error: ', error);
+      swal('Login Error: ', error);
     }
   };
-
-  if (currentUser) {
-    return <Redirect to="/" />;
-  }
 
   return (
     <Container className="container d-flex flex-column align-items-center justify-content-center fullscreen">

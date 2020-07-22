@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
 import swal from 'sweetalert';
@@ -6,7 +7,7 @@ import axios from 'axios';
 
 const Logout = () => {
   const { setCurrentUser } = useContext(AuthContext);
-  const token = localStorage.getItem('token');
+  const history = useHistory();
 
   const handleSignOut = async () => {
     try {
@@ -15,11 +16,13 @@ const Logout = () => {
         url: '/api/users/logout',
         withCredentials: true
       });
-      localStorage.removeItem('token');
+      sessionStorage.removeItem('user');
       setCurrentUser(null);
-      swal(response.data.message, 'You have signed out!', 'success');
+      swal(response.data.message, 'You have signed out!', 'success').then(() =>
+        history.push('/login')
+      );
     } catch (error) {
-      console.log('Logout Error: ', error);
+      swal('Oops!', error);
     }
   };
 
