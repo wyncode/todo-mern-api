@@ -10,10 +10,11 @@ export const AuthProvider = ({ children }) => {
   const [currentFilter, setCurrentFilter] = useState(null);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const user = sessionStorage.getItem('user');
 
   useEffect(() => {
     // incase user refreshes local session is cleared.
-    if (!currentUser) {
+    if (user && !currentUser) {
       axios
         .get(`/api/users/me`, {
           withCredentials: true
