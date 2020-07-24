@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Image } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
 import dueFilter from '../helpers/DueFilter';
 import Logout from './Logout';
@@ -36,7 +36,19 @@ const Navigation = () => {
           </Nav>
           <Nav>
             <Nav.Item>
-              {`Hi, ${currentUser.name}`}
+              {currentUser?.avatar ? (
+                <Image
+                  src={currentUser.avatar}
+                  height={50}
+                  width={50}
+                  roundedCircle
+                />
+              ) : (
+                `Hi, ${currentUser.name}`
+              )}
+              <Link className="ml-2" to="/profile">
+                Profile
+              </Link>
               <Logout />
             </Nav.Item>
           </Nav>
