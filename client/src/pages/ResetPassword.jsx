@@ -24,7 +24,7 @@ const ResetPassword = () => {
         );
       }
     } catch (error) {
-      console.log(error);
+      swal('Error', 'Oops, something went wrong.');
     }
   };
   return (
