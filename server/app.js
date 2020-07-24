@@ -8,6 +8,7 @@ const express = require('express'),
   taskRouter = require('./routes/secure/tasks'),
   openRoutes = require('./routes/open'),
   passport = require('./middleware/authentication'),
+  path = require('path'),
   app = express();
 
 // Parse incoming JSON into objects
