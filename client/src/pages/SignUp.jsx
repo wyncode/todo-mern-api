@@ -6,7 +6,7 @@ import swal from 'sweetalert';
 import axios from 'axios';
 
 const SignUp = ({ history }) => {
-  const { setCurrentUser, setIsLoggedIn } = useContext(AuthContext);
+  const { setCurrentUser } = useContext(AuthContext);
   const [formData, setFormData] = useState(null);
 
   const handleChange = (e) => {
@@ -19,7 +19,6 @@ const SignUp = ({ history }) => {
       const response = await axios.post('/api/users', formData);
       const token = response.data.token;
       localStorage.setItem('token', token);
-      setIsLoggedIn(true);
       setCurrentUser(response.data.user);
       history.push('/');
     } catch (error) {
