@@ -52,7 +52,7 @@ router.get('/api/users/me', async (req, res) => {
 // ***********************************************//
 router.patch('/api/users/me', async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['name', 'email', 'password', 'age'];
+  const allowedUpdates = ['name', 'email', 'password', 'avatar'];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );
