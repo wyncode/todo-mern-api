@@ -3,6 +3,7 @@ import { Container, Image, Button } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import wyncode from '../assets/images/Wyncode_icon.png';
+import swal from 'sweetalert';
 
 const Profile = () => {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
@@ -19,7 +20,7 @@ const Profile = () => {
       );
       setImage(response.data.secure_url);
     } catch (error) {
-      console.log(error);
+      swal('Error', 'Oops, something went wrong.');
     }
   };
 
@@ -32,7 +33,7 @@ const Profile = () => {
       });
       setCurrentUser(updatedUser.data);
     } catch (error) {
-      console.log(error);
+      swal('Error', 'Oops, something went wrong.');
     }
   };
 
