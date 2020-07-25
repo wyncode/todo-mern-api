@@ -18,15 +18,6 @@ app.use(express.json());
 app.use(openRoutes);
 
 app.use(cookieParser());
-app.use(
-  passport.authenticate('jwt', {
-    session: false
-  })
-);
-
-//  Authenticated  Routes
-app.use(userRouter);
-app.use(taskRouter);
 
 //
 if (process.env.NODE_ENV === 'production') {
@@ -37,5 +28,15 @@ if (process.env.NODE_ENV === 'production') {
     response.sendFile(path.join(__dirname, '../client/build', 'index.html'));
   });
 }
+
+app.use(
+  passport.authenticate('jwt', {
+    session: false
+  })
+);
+
+//  Authenticated  Routes
+app.use(userRouter);
+app.use(taskRouter);
 
 module.exports = app;
