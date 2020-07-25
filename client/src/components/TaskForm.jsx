@@ -26,7 +26,7 @@ const TaskForm = () => {
       setTaskData({});
       setLoading(false);
     } catch (error) {
-      swal('Oops!', error);
+      swal('Oops!', 'Something went wrong');
     }
   };
   return (
@@ -39,6 +39,7 @@ const TaskForm = () => {
             placeholder="Enter a task"
             name="description"
             onChange={handleChange}
+            required
           />
         </Form.Group>
         <Form.Group controlId="formBasicDueDate">
@@ -49,6 +50,7 @@ const TaskForm = () => {
             name="dueDate"
             onChange={handleChange}
             className="col-md-4"
+            required
           />
         </Form.Group>
         <Form.Group controlId="formBasicEmail">

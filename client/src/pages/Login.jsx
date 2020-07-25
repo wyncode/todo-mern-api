@@ -22,7 +22,7 @@ const Login = ({ history }) => {
       sessionStorage.setItem('user', response.data);
       history.push('/');
     } catch (error) {
-      swal('Login Error: ', error);
+      swal(`Oops!`, 'Something went wrong.');
     }
   };
 

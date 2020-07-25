@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react';
+import swal from 'sweetalert';
 import axios from 'axios';
 
 export const AuthContext = createContext();
@@ -22,9 +23,11 @@ export const AuthProvider = ({ children }) => {
         .then(({ data }) => {
           setCurrentUser(data);
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+          swal(`Oops!`, 'Something went wrong.');
+        });
     }
-  }, [currentUser]);
+  }, [currentUser, user]);
 
   return (
     <AuthContext.Provider
