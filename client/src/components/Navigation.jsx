@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Navbar, Nav, Image, Dropdown, Button } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
@@ -9,6 +9,10 @@ import Logout from './Logout';
 import axios from 'axios';
 
 const Navigation = () => {
+  const [active, setActive] = useState({
+    completed: false,
+    pending: false
+  });
   const {
       setCurrentUser,
       currentUser,
@@ -51,10 +55,24 @@ const Navigation = () => {
             <Nav.Item
               className="mr-2"
               onClick={() => filterCompleted('Completed')}
+              onMouseEnter={() => setActive({ ...active, completed: true })}
+              onMouseLeave={() => setActive({ ...active, completed: false })}
+              style={{
+                cursor: 'pointer',
+                textDecoration: active.completed ? 'underline' : 'none'
+              }}
             >
               Completed
             </Nav.Item>
-            <Nav.Item onClick={() => filterCompleted('Pending')}>
+            <Nav.Item
+              onClick={() => filterCompleted('Pending')}
+              onMouseEnter={() => setActive({ ...active, pending: true })}
+              onMouseLeave={() => setActive({ ...active, pending: false })}
+              style={{
+                cursor: 'pointer',
+                textDecoration: active.pending ? 'underline' : 'none'
+              }}
+            >
               Pending
             </Nav.Item>
           </Nav>
