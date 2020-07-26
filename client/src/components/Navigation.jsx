@@ -1,25 +1,48 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { Navbar, Nav, Image } from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
+import { Navbar, Nav, Image, Dropdown, Button } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
 import dueFilter from '../helpers/DueFilter';
+import swal from 'sweetalert';
+
 import Logout from './Logout';
+import axios from 'axios';
 
 const Navigation = () => {
-  const { currentUser, tasks, setFilteredTasks, setCurrentFilter } = useContext(
-    AuthContext
-  );
-
-  console.log(currentUser);
+  const {
+      setCurrentUser,
+      currentUser,
+      tasks,
+      setFilteredTasks,
+      setCurrentFilter
+    } = useContext(AuthContext),
+    { push } = useHistory();
   const filterCompleted = (query) => {
     dueFilter(query, tasks, setFilteredTasks);
     setCurrentFilter(query);
   };
 
+  const handleClick = async () => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: '/api/users/logout',
+        withCredentials: true
+      });
+      sessionStorage.removeItem('user');
+      setCurrentUser(null);
+      swal(response.data.message, 'You have signed out!', 'success').then(() =>
+        push('/login')
+      );
+    } catch (error) {
+      swal('Oops!', 'Something went wrong.');
+    }
+  };
+
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Brand as={Link} to="/">
-        WynTodo
+        Task Manager
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       {currentUser && (
@@ -38,19 +61,32 @@ const Navigation = () => {
           <Nav>
             <Nav.Item>
               {currentUser?.avatar ? (
-                <Image
-                  src={currentUser.avatar}
-                  height={50}
-                  width={50}
-                  roundedCircle
-                />
+                <Dropdown drop="down" style={{}} className="mr-1">
+                  <Dropdown.Toggle variant="">
+                    <Image
+                      src={currentUser.avatar}
+                      height={50}
+                      width={50}
+                      roundedCircle
+                    />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item as={Link} to="/profile">
+                      Profile
+                    </Dropdown.Item>
+                    <Logout />
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
-                `Hi, ${currentUser.name}`
+                <>
+                  <span>Hi, {currentUser.name}</span>
+
+                  <Link className="mx-4" to="/profile">
+                    Profile
+                  </Link>
+                  <Button onClick={handleClick}>Logout</Button>
+                </>
               )}
-              <Link className="ml-2" to="/profile">
-                Profile
-              </Link>
-              <Logout />
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>

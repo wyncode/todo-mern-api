@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
 import swal from 'sweetalert';
 import axios from 'axios';
@@ -26,11 +26,7 @@ const Logout = () => {
     }
   };
 
-  return (
-    <Button className="ml-3" onClick={handleSignOut}>
-      Logout
-    </Button>
-  );
+  return <Dropdown.Item onClick={handleSignOut}>Logout</Dropdown.Item>;
 };
 
 export default Logout;

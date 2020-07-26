@@ -28,7 +28,7 @@ const Login = ({ history }) => {
 
   return (
     <Container className="container d-flex flex-column align-items-center justify-content-center fullscreen">
-      <h1 className="mb-4">WynTodo!</h1>
+      <h1 className="mb-4">Task Manager</h1>
       <Form style={{ width: 300 }} onSubmit={handleLogin}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
