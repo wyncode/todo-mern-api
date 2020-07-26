@@ -8,6 +8,7 @@ const express = require('express'),
   taskRouter = require('./routes/secure/tasks'),
   openRoutes = require('./routes/open'),
   passport = require('./middleware/authentication'),
+  path = require('path'),
   app = express();
 
 // Parse incoming JSON into objects
@@ -17,6 +18,13 @@ app.use(express.json());
 app.use(openRoutes);
 
 app.use(cookieParser());
+
+//
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
+
 app.use(
   passport.authenticate('jwt', {
     session: false
@@ -27,10 +35,7 @@ app.use(
 app.use(userRouter);
 app.use(taskRouter);
 
-//
 if (process.env.NODE_ENV === 'production') {
-  // Serve any static files
-  app.use(express.static(path.join(__dirname, '../client/build')));
   // Handle React routing, return all requests to React app
   app.get('*', (request, response) => {
     response.sendFile(path.join(__dirname, '../client/build', 'index.html'));
