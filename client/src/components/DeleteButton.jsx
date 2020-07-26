@@ -38,7 +38,11 @@ const DeleteButton = ({ id }) => {
       swal(`Oops!`, 'Something went wrong.');
     }
   };
-  return <Button onClick={handleDelete}>Delete</Button>;
+  return (
+    <Button onClick={handleDelete} variant="danger">
+      Delete
+    </Button>
+  );
 };
 
 export default DeleteButton;
