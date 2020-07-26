@@ -17,12 +17,12 @@ const SignUp = ({ history }) => {
     e.preventDefault();
     try {
       const response = await axios.post('/api/users', formData);
-      const token = response.data.token;
-      localStorage.setItem('token', token);
-      setCurrentUser(response.data.user);
+      setCurrentUser(response.data);
+      // persists user if browser is refreshes.
+      sessionStorage.setItem('user', response.data);
       history.push('/');
     } catch (error) {
-      swal('SignUp Error: ', error);
+      swal('SignUp Error: ', error.toString());
     }
   };
   return (

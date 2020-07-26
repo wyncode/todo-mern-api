@@ -1,5 +1,5 @@
 const router = require('express').Router(),
-  { forgotPasswordEmail } = require('../../emails'),
+  { sendWelcomeEmail, forgotPasswordEmail } = require('../../emails'),
   User = require('../../db/models/user'),
   bcrypt = require('bcryptjs');
 
@@ -32,7 +32,11 @@ router.post('/api/users', async (req, res) => {
     await user.save();
     sendWelcomeEmail(user.email, user.name);
     const token = await user.generateAuthToken();
-    res.status(201).json({ user, token });
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'Strict'
+    });
+    res.json(user);
   } catch (e) {
     res.status(400).send(e);
   }

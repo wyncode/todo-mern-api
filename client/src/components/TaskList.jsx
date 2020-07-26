@@ -26,7 +26,7 @@ const TaskList = () => {
         setFilteredTasks(response.data);
       })
       .catch((error) => {
-        swal(`Oops!`, error); // TODO handle this better
+        swal(`Oops!`, 'Something went wrong.');
       });
     // when setTasks, setFilteredTasks, and search values are changed, it will rerender.
   }, [setTasks, setFilteredTasks, search, loading]);

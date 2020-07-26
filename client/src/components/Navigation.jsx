@@ -10,6 +10,7 @@ const Navigation = () => {
     AuthContext
   );
 
+  console.log(currentUser);
   const filterCompleted = (query) => {
     dueFilter(query, tasks, setFilteredTasks);
     setCurrentFilter(query);

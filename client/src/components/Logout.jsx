@@ -22,7 +22,7 @@ const Logout = () => {
         history.push('/login')
       );
     } catch (error) {
-      swal('Oops!', error);
+      swal('Oops!', 'Something went wrong.');
     }
   };
 

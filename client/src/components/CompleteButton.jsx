@@ -19,7 +19,7 @@ const CompleteButton = ({ task }) => {
       swal('Updated', 'Your task has been updated!', 'success');
       setLoading(false);
     } catch (error) {
-      swal(`Oops!`, error);
+      swal(`Oops!`, 'Something went wrong.');
     }
   };
   return (
