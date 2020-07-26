@@ -13,6 +13,7 @@ const TaskForm = () => {
   };
 
   const handleTaskSubmission = async (e) => {
+    const form = e.target;
     setLoading(true);
     e.preventDefault();
     try {
@@ -25,6 +26,7 @@ const TaskForm = () => {
       swal('New Task!', 'You task has been added!', 'success');
       setTaskData({});
       setLoading(false);
+      form.reset();
     } catch (error) {
       swal('Oops!', 'Something went wrong');
     }
