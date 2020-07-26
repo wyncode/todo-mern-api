@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
           setCurrentUser(data);
         })
         .catch((error) => {
-          swal(`Oops!`, 'Something went wrong.');
+          swal(`Oops!`, error.toString());
         });
     }
   }, [currentUser, user]);

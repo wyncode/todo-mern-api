@@ -26,7 +26,7 @@ const dbReset = async () => {
   for (let i = 0; i < 1000; i++) {
     const me = new User({
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-      age: Math.floor(Math.random() * 50) + 18,
+      admin: Boolean(Math.round(Math.random())),
       email: faker.internet.email(),
       password: faker.internet.password()
     });
