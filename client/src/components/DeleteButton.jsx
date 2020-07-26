@@ -28,12 +28,14 @@ const DeleteButton = ({ id }) => {
             icon: 'success'
           });
           setLoading(false);
-        } catch (error) {} // TODO handle this
+        } catch (error) {
+          swal(`Oops!`, 'Something went wrong.');
+        }
       } else {
         swal('Your task is safe!');
       }
     } catch (error) {
-      swal('Oops!', error);
+      swal(`Oops!`, 'Something went wrong.');
     }
   };
   return <Button onClick={handleDelete}>Delete</Button>;

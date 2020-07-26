@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Container, Image, Button } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
@@ -32,6 +32,7 @@ const Profile = () => {
         avatar: image
       });
       setCurrentUser(updatedUser.data);
+      swal('Sweet!', 'Your image has been updated!', 'success');
     } catch (error) {
       swal('Error', 'Oops, something went wrong.');
     }
