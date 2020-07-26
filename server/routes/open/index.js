@@ -15,7 +15,8 @@ router.post('/api/users/login', async (req, res) => {
     const token = await user.generateAuthToken();
     res.cookie('jwt', token, {
       httpOnly: true,
-      sameSite: 'Strict'
+      sameSite: 'Strict',
+      secure: process.env.NODE_ENV !== 'production' ? false : true
     });
     res.json(user);
   } catch (e) {
@@ -34,11 +35,12 @@ router.post('/api/users', async (req, res) => {
     const token = await user.generateAuthToken();
     res.cookie('jwt', token, {
       httpOnly: true,
-      sameSite: 'Strict'
+      sameSite: 'Strict',
+      secure: process.env.NODE_ENV !== 'production' ? false : true
     });
     res.json(user);
   } catch (e) {
-    res.status(400).send(e);
+    res.status(201).status(400).send(e);
   }
 });
 

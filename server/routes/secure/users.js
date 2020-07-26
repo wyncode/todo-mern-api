@@ -68,72 +68,13 @@ router.patch('/api/users/me', async (req, res) => {
 });
 
 // ***********************************************//
-// Upload a user avatar
-// ***********************************************//
-const upload = multer({
-  limits: {
-    fileSize: 1000000
-  },
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-      return cb(new Error('Please upload an image.'));
-    }
-    cb(undefined, true);
-  }
-});
-
-router.post(
-  '/api/users/me/avatar',
-  upload.single('avatar'),
-  async (req, res) => {
-    const buffer = await sharp(req.file.buffer)
-      .resize({
-        width: 250,
-        height: 250
-      })
-      .png()
-      .toBuffer();
-    req.user.avatar = buffer;
-    await req.user.save();
-    res.send();
-  },
-  (error, req, res, next) => {
-    res.status(400).json({ error: error.message });
-  }
-);
-
-// ***********************************************//
-// Delete a user's avatar
-// ***********************************************//
-router.delete('/api/users/me/avatar', async (req, res) => {
-  req.user.avatar = null;
-  await req.user.save();
-  res.sendStatus(200);
-});
-
-// ***********************************************//
-// Serve a user's avatar
-// ***********************************************//
-router.get('/api/users/:id/avatar', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user || !user.avatar) {
-      throw new Error();
-    }
-    res.set('Content-Type', 'image/png');
-    res.json(user.avatar);
-  } catch (e) {
-    res.sendStatus(404);
-  }
-});
-
-// ***********************************************//
 // Delete a user
 // ***********************************************//
 router.delete('/api/users/me', async (req, res) => {
   try {
     await req.user.remove();
     sendCancellationEmail(req.user.email, req.user.name);
+    res.clearCookie('jwt');
     res.json(req.user);
   } catch (e) {
     res.sendStatus(500);

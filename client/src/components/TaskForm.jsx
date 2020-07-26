@@ -50,7 +50,6 @@ const TaskForm = () => {
             name="dueDate"
             onChange={handleChange}
             className="col-md-4"
-            required
           />
         </Form.Group>
         <Form.Group controlId="formBasicEmail">
