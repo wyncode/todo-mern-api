@@ -23,7 +23,12 @@ const CompleteButton = ({ task }) => {
     }
   };
   return (
-    <Button className="mr-2" onClick={toggleComplete}>
+    <Button
+      className="mr-2"
+      onClick={toggleComplete}
+      style={{ width: 150 }}
+      variant={task.completed ? 'success' : 'secondary'}
+    >
       {task.completed ? 'Mark Incomplete' : 'Mark Complete'}
     </Button>
   );
