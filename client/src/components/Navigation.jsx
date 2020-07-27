@@ -75,6 +75,20 @@ const Navigation = () => {
             >
               Pending
             </Nav.Item>
+            <Nav.Item
+              onMouseEnter={() => setActive({ ...active, calendar: true })}
+              onMouseLeave={() => setActive({ ...active, calendar: false })}
+              style={{
+                cursor: 'pointer',
+                textDecoration: active.pending ? 'underline' : 'none',
+                marginLeft: '.8rem',
+                color: '#212529'
+              }}
+              as={Link}
+              to="/calendar"
+            >
+              Calendar
+            </Nav.Item>
           </Nav>
           <Nav>
             <Nav.Item>
