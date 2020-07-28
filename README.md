@@ -1,6 +1,5 @@
-# Mern Todo API
+# MERN Todo App
 
-A MERN-stack API to handle To Do lists. Uses bryptjs and JWT for authentication.
 
 ## Requirements
 
