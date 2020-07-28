@@ -7,7 +7,6 @@ import DateFilters from '../components/DateFilters';
 const Home = () => {
   return (
     <div>
-      <Navigation />
       <DateFilters />
       <TaskList />
       <TaskForm />

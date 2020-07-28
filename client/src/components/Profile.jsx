@@ -79,7 +79,7 @@ const Profile = ({ history: { push } }) => {
 
   return (
     <>
-      <Navigation />
+      {/* <Navigation /> */}
       <Container className="d-flex justify-content-center align-items-center flex-column">
         <h1 className="mt-4">Your Profile</h1>
         <div className="mt-4">
