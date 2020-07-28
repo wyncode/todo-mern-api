@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import wyncode from '../assets/images/Wyncode_icon.png';
 import swal from 'sweetalert';
+import Navigation from '../components/Navigation';
 
 const Profile = ({ history: { push } }) => {
   const { currentUser, setCurrentUser, setLoading } = useContext(AuthContext);
@@ -77,49 +78,52 @@ const Profile = ({ history: { push } }) => {
   };
 
   return (
-    <Container className="d-flex justify-content-center align-items-center flex-column">
-      <h1 className="mt-4">Your Profile</h1>
-      <div className="mt-4">
-        <Image
-          src={
-            image ? image : currentUser?.avatar ? currentUser.avatar : wyncode
-          }
-          alt="profile-picture"
-          width={250}
-          height={250}
-          roundedCircle
-        />
-      </div>
-      <div className="mt-4">
-        <form
-          method="post"
-          onSubmit={handleSubmit}
-          className="d-flex flex-column"
-        >
-          <input type="file" onChange={handleImageSelect} accept="image/*" />
-          <Button type="submit" size="sm" className="mt-4">
-            Save Image
+    <>
+      <Navigation />
+      <Container className="d-flex justify-content-center align-items-center flex-column">
+        <h1 className="mt-4">Your Profile</h1>
+        <div className="mt-4">
+          <Image
+            src={
+              image ? image : currentUser?.avatar ? currentUser.avatar : wyncode
+            }
+            alt="profile-picture"
+            width={250}
+            height={250}
+            roundedCircle
+          />
+        </div>
+        <div className="mt-4">
+          <form
+            method="post"
+            onSubmit={handleSubmit}
+            className="d-flex flex-column"
+          >
+            <input type="file" onChange={handleImageSelect} accept="image/*" />
+            <Button type="submit" size="sm" className="mt-4">
+              Save Image
+            </Button>
+          </form>
+        </div>
+        <div className="d-flex flex-column align-items-center justify-content-center mt-4">
+          <div className="d-flex ">
+            <label htmlFor="name" className="pr-4 font-weight-bold">
+              Name:
+            </label>
+            <p>{currentUser?.name}</p>
+          </div>
+          <div className="d-flex">
+            <label htmlFor="email" className="pr-4 font-weight-bold">
+              Email:
+            </label>
+            <p>{currentUser?.email}</p>
+          </div>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete Account
           </Button>
-        </form>
-      </div>
-      <div className="d-flex flex-column align-items-center justify-content-center mt-4">
-        <div className="d-flex ">
-          <label htmlFor="name" className="pr-4 font-weight-bold">
-            Name:
-          </label>
-          <p>{currentUser?.name}</p>
         </div>
-        <div className="d-flex">
-          <label htmlFor="email" className="pr-4 font-weight-bold">
-            Email:
-          </label>
-          <p>{currentUser?.email}</p>
-        </div>
-        <Button variant="danger" onClick={handleDelete}>
-          Delete Account
-        </Button>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 };
 
