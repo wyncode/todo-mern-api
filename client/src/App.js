@@ -4,7 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Navigation from './components/Navigation';
+// import Navigation from './components/Navigation';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import './App.css';
@@ -18,9 +18,6 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/reset-password" component={ResetPassword} />
-        </Switch>
-        <Switch>
-          <Navigation />
           <PrivateRoute exact path="/" component={Home} />
           <PrivateRoute exact path="/profile" component={Profile} />
         </Switch>
