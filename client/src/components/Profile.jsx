@@ -9,33 +9,31 @@ import Navigation from '../components/Navigation';
 const Profile = ({ history: { push } }) => {
   const { currentUser, setCurrentUser, setLoading } = useContext(AuthContext);
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   const handleImageSelect = async (e) => {
-    // max file size 1mb
+    // // max file size 1mb
     if (e.target.files[0].size > 1000000)
       throw new Error('file size exceeds limit');
-    const formData = new FormData();
-    formData.append('upload_preset', 'todoapp');
-    formData.append('file', e.target.files[0]);
-    try {
-      const response = await axios.post(
-        process.env.REACT_APP_CLOUDINARY, //
-        formData
-      );
-      setImage(response.data.secure_url);
-    } catch (error) {
-      swal('Error', 'Oops, something went wrong.');
-    }
+    setPreview(URL.createObjectURL(e.target.files[0]));
+    setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
+    const avatar = new FormData();
+    avatar.append('avatar', image, image.name);
     try {
-      const updatedUser = await axios.patch('/api/users/me', {
-        avatar: image
+      const updatedUser = await axios({
+        method: 'POST',
+        url: '/api/users/avatar',
+        data: avatar,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
-      setCurrentUser(updatedUser.data);
+      setCurrentUser({ ...currentUser, avatar: updatedUser.data.secure_url });
       swal('Sweet!', 'Your image has been updated!', 'success');
     } catch (error) {
       swal('Error', 'Oops, something went wrong.');
@@ -85,7 +83,11 @@ const Profile = ({ history: { push } }) => {
         <div className="mt-4">
           <Image
             src={
-              image ? image : currentUser?.avatar ? currentUser.avatar : wyncode
+              preview
+                ? preview
+                : currentUser?.avatar
+                ? currentUser.avatar
+                : wyncode
             }
             alt="profile-picture"
             width={250}

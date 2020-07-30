@@ -1,4 +1,5 @@
 const express = require('express'),
+  cloudinary = require('cloudinary').v2,
   router = new express.Router(),
   User = require('../../db/models/user'),
   multer = require('multer'),
@@ -78,6 +79,20 @@ router.delete('/api/users/me', async (req, res) => {
     res.json(req.user);
   } catch (e) {
     res.sendStatus(500);
+  }
+});
+
+router.post('/api/users/avatar', async (req, res) => {
+  // console.log(req.files.avatar);
+  try {
+    const response = await cloudinary.uploader.upload(
+      req.files.avatar.tempFilePath
+    );
+    req.user.avatar = response.secure_url;
+    await req.user.save();
+    res.json(response);
+  } catch (error) {
+    console.log(error);
   }
 });
 
