@@ -14,7 +14,7 @@ router.post('/api/users/', async (req, res) => {
       email,
       password
     });
-   
+
     const token = await user.generateAuthToken();
     res.cookie('jwt', token, {
       httpOnly: true,
@@ -51,7 +51,7 @@ router.post('/api/users/login', async (req, res) => {
 router.get('/password', async (req, res) => {
   try {
     const { email } = req.query,
-    const user = await User.findOne({ email });
+      user = await User.findOne({ email });
     if (!user) throw new Error("account doesn't exist");
     // Build jwt token
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
