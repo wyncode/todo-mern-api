@@ -1,4 +1,4 @@
-Updateconst router = require('express').Router();
+const router = require('express').Router();
 
 // ***********************************************//
 // Get current user
