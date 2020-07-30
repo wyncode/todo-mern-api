@@ -1,4 +1,7 @@
-const router = require('express').Router();
+const express = require('express'),
+  cloudinary = require('cloudinary').v2,
+  router = new express.Router(),
+  { sendCancellationEmail } = require('../../emails');
 
 // ***********************************************//
 // Get current user
@@ -80,6 +83,20 @@ router.put('/password', async (req, res) => {
     res.redirect('/login');
   } catch (e) {
     res.json({ error: e.toString() });
+  }
+});
+
+router.post('/api/users/avatar', async (req, res) => {
+  // console.log(req.files.avatar);
+  try {
+    const response = await cloudinary.uploader.upload(
+      req.files.avatar.tempFilePath
+    );
+    req.user.avatar = response.secure_url;
+    await req.user.save();
+    res.json(response);
+  } catch (error) {
+    res.json( { error: e.toString() } );
   }
 });
 
