@@ -18,13 +18,13 @@ const sendCancellationEmail = (email, name) => {
     to: email,
     from: `${process.env.FROM_EMAIL}`,
     subject: 'Sorry to see you go.',
-    text: `Bye ${name}. If you change your mind let us know.`
+    text: `Bye ${name}. We hope to see you again soon.`
   });
 };
 
-const forgotPasswordEmail = (email, token, password) => {
+const forgotPasswordEmail = (email, token) => {
   const exampleHTMLEmail = `
-  <a target="_blank" rel="noopener noreferrer" href="${process.env.APP_URL}/users/password/reset?email=${email}&token=${token}&password=${password}">Reset Password</a>
+  <a target="_blank" rel="noopener noreferrer" href="${process.env.APP_URL}/password/${token}">Reset Password</a>
   `;
 
   sgMail.send({
