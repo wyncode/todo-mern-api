@@ -92,7 +92,7 @@ router.post('/api/users/avatar', async (req, res) => {
     await req.user.save();
     res.json(response);
   } catch (error) {
-    console.log(error);
+    res.json( { error: e.toString() } );
   }
 });
 
