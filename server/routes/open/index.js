@@ -1,85 +1,87 @@
 const router = require('express').Router(),
   { sendWelcomeEmail, forgotPasswordEmail } = require('../../emails'),
-  User = require('../../db/models/user'),
-  bcrypt = require('bcryptjs');
+  jwt = require('jsonwebtoken'),
+  User = require('../../db/models/user');
+
+// ***********************************************//
+// Create a user
+// ***********************************************//
+router.post('/api/users/', async (req, res) => {
+  const { name, email, password } = req.body;
+  try {
+    const user = new User({
+      name,
+      email,
+      password
+    });
+   
+    const token = await user.generateAuthToken();
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'Strict',
+      secure: process.env.NODE_ENV !== 'production' ? false : true
+    });
+    sendWelcomeEmail(user.email, user.name);
+    res.status(201).json(user);
+  } catch (e) {
+    res.status(400).json({ error: e.toString() });
+  }
+});
 
 // ***********************************************//
 // Login a user
 // ***********************************************//
 router.post('/api/users/login', async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const user = await User.findByCredentials(
-      req.body.email,
-      req.body.password
-    );
+    const user = await User.findByCredentials(email, password);
     const token = await user.generateAuthToken();
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      sameSite: 'Strict',
-      secure: process.env.NODE_ENV !== 'production' ? false : true
-    });
     res.json(user);
   } catch (e) {
-    res.status(400).send();
+    res.status(400).json({ error: e.toString() });
   }
 });
 
-// ***********************************************//
-// Create a user
-// ***********************************************//
-router.post('/api/users', async (req, res) => {
-  const user = new User(req.body);
+// ******************************
+// Password Reset Request
+// This route sends an email that the
+// user must click within 10 minutes
+// to reset their password.
+// ******************************
+router.get('/password', async (req, res) => {
   try {
-    await user.save();
-    sendWelcomeEmail(user.email, user.name);
-    const token = await user.generateAuthToken();
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      sameSite: 'Strict',
-      secure: process.env.NODE_ENV !== 'production' ? false : true
+    const { email } = req.query,
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("account doesn't exist");
+    // Build jwt token
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: '10m'
     });
-    res.json(user);
+    forgotPasswordEmail(email, token);
+    res.json({ message: 'reset password email sent' });
   } catch (e) {
-    res.status(201).status(400).send(e);
+    res.json({ error: e.toString() });
   }
 });
 
-// ***********************************************//
-// Reset Password
-// ***********************************************//
-router.get('/api/users/password/reset', async (req, res) => {
-  let newPassword = await bcrypt.hash(req.query.password, 8);
-  const update = { password: newPassword };
-  const filter = { email: req.query.email };
-
-  const user = await User.findOne({
-    email: req.query.email
-  });
-
+// ******************************
+// Redirect to password reset page
+// ******************************
+router.get('/password/:token', (req, res) => {
+  const { token } = req.params;
   try {
-    if (user.tokens[0].token !== req.query.token) {
-      throw new Error();
-    }
+    jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
+      if (err) throw new Error(err.message);
 
-    await User.findOneAndUpdate(filter, update);
-    res.redirect('/');
-  } catch (e) {
-    res.status(400).send(e.toString());
-  }
-});
-
-// ***********************************************//
-// Reset Password Email Request
-// ***********************************************//
-router.get('/api/users/password/forgot', async (req, res) => {
-  try {
-    const user = await User.findOne({
-      email: req.query.email
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        maxAge: 600000,
+        sameSite: 'Strict'
+      });
+      res.redirect(process.env.URL + '/update-password');
     });
-    forgotPasswordEmail(user.email, user.tokens[0].token, req.query.password);
-    res.json();
   } catch (e) {
-    res.status(400).send(e.toString());
+    res.json({ error: e.toString() });
   }
 });
 

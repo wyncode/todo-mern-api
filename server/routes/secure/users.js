@@ -1,51 +1,9 @@
-const express = require('express'),
-  router = new express.Router(),
-  User = require('../../db/models/user'),
-  multer = require('multer'),
-  sharp = require('sharp'),
-  { sendCancellationEmail } = require('../../emails');
+Updateconst router = require('express').Router();
 
-// ***********************************************//
-// Login Check
-// ***********************************************//
-router.post('/api/loginCheck', async (req, res) => res.sendStatus(200));
-
-// ***********************************************//
-// Logout a user
-// ***********************************************//
-router.post('/api/users/logout', async (req, res) => {
-  try {
-    req.user.tokens = req.user.tokens.filter((token) => {
-      return token.token !== req.token;
-    });
-    await req.user.save();
-    res.clearCookie('jwt');
-    res.json({ message: 'Logged out!' });
-  } catch (e) {
-    res.status(500).send();
-  }
-});
-
-// ***********************************************//
-// Logout all devices
-// ***********************************************//
-router.post('/api/users/logoutAll', async (req, res) => {
-  try {
-    req.user.tokens = [];
-    await req.user.save();
-    res.clearCookie('jwt');
-    res.sendStatus(200);
-  } catch (e) {
-    res.status(500).send();
-  }
-});
 // ***********************************************//
 // Get current user
 // ***********************************************//
-
-router.get('/api/users/me', async (req, res) => {
-  res.json(req.user);
-});
+router.get('/api/users/me', async (req, res) => res.json(req.user));
 
 // ***********************************************//
 // Update a user
@@ -63,7 +21,37 @@ router.patch('/api/users/me', async (req, res) => {
     await req.user.save();
     res.json(req.user);
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).json({ error: e.toString() });
+  }
+});
+
+// ***********************************************//
+// Logout a user
+// ***********************************************//
+router.post('/api/users/logout', async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token;
+    });
+    await req.user.save();
+    res.clearCookie('jwt');
+    res.json({ message: 'logged out' });
+  } catch (e) {
+    res.status(500).json({ error: e.toString() });
+  }
+});
+
+// ***********************************************//
+// Logout all devices
+// ***********************************************//
+router.post('/api/users/logoutAll', async (req, res) => {
+  try {
+    req.user.tokens = [];
+    await req.user.save();
+    res.clearCookie('jwt');
+    res.json({ message: 'all devices logged out' });
+  } catch (e) {
+    res.status(500).send();
   }
 });
 
@@ -73,11 +61,25 @@ router.patch('/api/users/me', async (req, res) => {
 router.delete('/api/users/me', async (req, res) => {
   try {
     await req.user.remove();
-    sendCancellationEmail(req.user.email, req.user.name);
     res.clearCookie('jwt');
-    res.json(req.user);
+    res.json({ message: 'user deleted' });
   } catch (e) {
-    res.sendStatus(500);
+    res.status(500).json({ error: e.toString() });
+  }
+});
+
+// ******************************
+// Update password
+// ******************************
+router.put('/password', async (req, res) => {
+  try {
+    const hashedPassword = await bcryptjs.hash(req.body.password, 8);
+    req.user.password = hashedPassword;
+    await req.user.save();
+    res.clearCookie('jwt');
+    res.redirect('/login');
+  } catch (e) {
+    res.json({ error: e.toString() });
   }
 });
 

@@ -3,6 +3,40 @@ const router = require('express').Router(),
   Task = require('../../db/models/task');
 
 // ***********************************************//
+// Create a task
+// ***********************************************//
+router.post('/api/tasks', async (req, res) => {
+  const task = await new Task({
+    ...req.body,
+    owner: req.user._id
+  });
+  try {
+    task.save();
+    res.status(201).json(task);
+  } catch (e) {
+    res.status(400).json({ error: e.toString() });
+  }
+});
+
+// ***********************************************//
+// Get a specific task
+// ***********************************************//
+router.get('/api/tasks/:id', async (req, res) => {
+  const _id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(_id))
+    return res.status(400).send('Not a valid task id');
+
+  try {
+    const task = await Task.findOne({ _id, owner: req.user._id });
+    if (!task) return res.status(404).send();
+
+    res.json(task);
+  } catch (e) {
+    res.status(500).json({ error: e.toString() });
+  }
+});
+
+// ***********************************************//
 // Get all tasks
 // /tasks?completed=true
 // /tasks?limit=10&skip=10
@@ -13,9 +47,8 @@ router.get('/api/tasks', async (req, res) => {
   const match = {},
     sort = {};
 
-  if (req.query.completed) {
-    match.completed = req.query.completed === 'true';
-  }
+  if (req.query.completed) match.completed = req.query.completed === 'true';
+
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(':');
     sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
@@ -34,41 +67,7 @@ router.get('/api/tasks', async (req, res) => {
       .execPopulate();
     res.json(req.user.tasks);
   } catch (e) {
-    res.status(500).send();
-  }
-});
-
-// ***********************************************//
-// Get a specific task
-// ***********************************************//
-router.get('/api/tasks/:id', async (req, res) => {
-  const _id = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(_id))
-    return res.status(400).send('Not a valid task id');
-
-  try {
-    const task = await Task.findOne({ _id, owner: req.user._id });
-    if (!task) return res.status(404).send();
-
-    res.json(task);
-  } catch (e) {
-    res.status(500).send();
-  }
-});
-
-// ***********************************************//
-// Create a task
-// ***********************************************//
-router.post('/api/tasks', async (req, res) => {
-  const task = await new Task({
-    ...req.body,
-    owner: req.user._id
-  });
-  try {
-    task.save();
-    res.status(201).json(task);
-  } catch (e) {
-    res.status(400).send(e);
+    res.status(500).json({ error: e.toString() });
   }
 });
 
@@ -89,12 +88,12 @@ router.patch('/api/tasks/:id', async (req, res) => {
       _id: req.params.id,
       owner: req.user._id
     });
-    if (!task) return res.status(404).send();
+    if (!task) return res.status(404).json({ error: 'task not found' });
     updates.forEach((update) => (task[update] = req.body[update]));
     await task.save();
     res.json(task);
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).json({ error: e.toString() });
   }
 });
 
@@ -107,10 +106,10 @@ router.delete('/api/tasks/:id', async (req, res) => {
       _id: req.params.id,
       owner: req.user._id
     });
-    if (!task) return res.status(404).send();
+    if (!task) return res.status(404).json({ error: 'task not found' });
     res.json(task);
   } catch (e) {
-    res.status(500).send();
+    res.status(500).json({ error: e.toString() });
   }
 });
 
