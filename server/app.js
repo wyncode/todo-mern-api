@@ -9,7 +9,8 @@ const express = require('express'),
   openRoutes = require('./routes/open'),
   passport = require('./middleware/authentication'),
   path = require('path'),
-  app = express();
+  app = express(),
+  fileUpload = require('express-fileupload');
 
 // Parse incoming JSON into objects
 app.use(express.json());
@@ -28,6 +29,13 @@ if (process.env.NODE_ENV === 'production') {
 app.use(
   passport.authenticate('jwt', {
     session: false
+  })
+);
+
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/images'
   })
 );
 
