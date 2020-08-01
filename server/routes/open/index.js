@@ -36,6 +36,11 @@ router.post('/api/users/login', async (req, res) => {
   try {
     const user = await User.findByCredentials(email, password);
     const token = await user.generateAuthToken();
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'Strict',
+      secure: process.env.NODE_ENV !== 'production' ? false : true
+    });
     res.json(user);
   } catch (e) {
     res.status(400).json({ error: e.toString() });

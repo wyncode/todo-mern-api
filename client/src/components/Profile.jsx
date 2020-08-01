@@ -101,7 +101,12 @@ const Profile = ({ history: { push } }) => {
             onSubmit={handleSubmit}
             className="d-flex flex-column"
           >
-            <input type="file" onChange={handleImageSelect} accept="image/*" />
+            <input
+              type="file"
+              onChange={handleImageSelect}
+              accept="image/*"
+              required
+            />
             <Button type="submit" size="sm" className="mt-4">
               Save Image
             </Button>
@@ -128,5 +133,4 @@ const Profile = ({ history: { push } }) => {
     </>
   );
 };
-
 export default Profile;
