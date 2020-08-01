@@ -3,9 +3,8 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 require('./mongoose');
 
 const Task = require('../models/task'),
-  User = require('../models/user');
-
-const faker = require('faker'),
+  User = require('../models/user'),
+  faker = require('faker'),
   mongoose = require('mongoose');
 
 const dbReset = async () => {
