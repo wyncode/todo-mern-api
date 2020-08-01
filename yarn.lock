@@ -1612,10 +1612,10 @@ expect@^24.9.0:
     jest-message-util "^24.9.0"
     jest-regex-util "^24.9.0"
 
-express-fileupload@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.1.8.tgz#188ada201db8ba41b5cce1bd7d0445c2ef7c0637"
-  integrity sha512-5FY1of8hxuI6HfmceDKc2Y6vg3EuXAlLz0Jw/BUglzrm7nKRuvjN6Y8ZgBfRp+1t5YkGAX7TEb5a5AmG5RqDcA==
+express-fileupload@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.1.9.tgz#e798e9318394ed5083e56217ad6cda576da465d2"
+  integrity sha512-f2w0aoe7lj3NeD8a4MXmYQsqir3Z66I08l9AKq04QbFUAjeZNmPwTlR5Lx2NGwSu/PslsAjGC38MWzo5tTjoBg==
   dependencies:
     busboy "^0.3.1"
 
