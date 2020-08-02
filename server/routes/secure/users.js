@@ -77,14 +77,10 @@ router.delete('/api/users/me', async (req, res) => {
 // ******************************
 router.put('/api/password', async (req, res) => {
   try {
-    // const hashedPassword = await bcrypt.hash(req.body.password, 8);
-    // console.log('HASHED', hashedPassword);
     req.user.password = req.body.password;
-
     await req.user.save();
     res.clearCookie('jwt');
     res.json({ message: 'Password updated successfully' });
-    // res.redirect(process.env.URL + '/login');
   } catch (e) {
     res.json({ error: e.toString() });
   }
