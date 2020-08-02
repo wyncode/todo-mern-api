@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import './App.css';
 import Profile from './components/Profile';
+import UpdatePassword from './pages/UpdatePassword';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/reset-password" component={ResetPassword} />
+          <Route exact path="/update-password" component={UpdatePassword} />
           <PrivateRoute exact path="/" component={Home} />
           <PrivateRoute exact path="/profile" component={Profile} />
         </Switch>
