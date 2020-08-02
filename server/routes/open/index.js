@@ -53,15 +53,19 @@ router.post('/api/users/login', async (req, res) => {
 // user must click within 10 minutes
 // to reset their password.
 // ******************************
-router.get('/password', async (req, res) => {
+router.get('/api/password', async (req, res) => {
   try {
     const { email } = req.query,
       user = await User.findOne({ email });
     if (!user) throw new Error("account doesn't exist");
     // Build jwt token
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-      expiresIn: '10m'
-    });
+    const token = jwt.sign(
+      { _id: user._id.toString(), name: user.name },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '10m'
+      }
+    );
     forgotPasswordEmail(email, token);
     res.json({ message: 'reset password email sent' });
   } catch (e) {
@@ -72,19 +76,18 @@ router.get('/password', async (req, res) => {
 // ******************************
 // Redirect to password reset page
 // ******************************
-router.get('/password/:token', (req, res) => {
+router.get('/api/password/:token', (req, res) => {
   const { token } = req.params;
   try {
     jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
       if (err) throw new Error(err.message);
-
-      res.cookie('jwt', token, {
-        httpOnly: true,
-        maxAge: 600000,
-        sameSite: 'Strict'
-      });
-      res.redirect(process.env.URL + '/update-password');
     });
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 600000,
+      sameSite: 'Strict'
+    });
+    res.redirect(process.env.URL + '/update-password');
   } catch (e) {
     res.json({ error: e.toString() });
   }

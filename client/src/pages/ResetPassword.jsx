@@ -5,24 +5,21 @@ import axios from 'axios';
 import swal from 'sweetalert';
 
 const ResetPassword = () => {
-  const [formData, setFormData] = useState(null);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [email, setEmail] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const form = e.target;
     try {
-      const response = await axios.get(
-        `/api/users/password/forgot?email=${formData.email}&password=${formData.password}`
-      );
+      const response = await axios.get(`/api/password?email=${email}`);
       if (response) {
         swal(
           'Email sent',
           'Check your email for a link to reset your password.'
         );
       }
+      form.reset();
     } catch (error) {
       swal('Error', 'Oops, something went wrong.');
     }
@@ -37,17 +34,9 @@ const ResetPassword = () => {
             type="email"
             placeholder="Enter email"
             name="email"
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="formBasicPassword">
-          <Form.Label>New Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="New Password"
-            name="password"
-            onChange={handleChange}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="off"
           />
         </Form.Group>
         <Form.Group className="d-flex justify-content-center">
