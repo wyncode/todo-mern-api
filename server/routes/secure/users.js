@@ -1,5 +1,6 @@
 const express = require('express'),
   cloudinary = require('cloudinary').v2,
+  bcrypt = require('bcryptjs'),
   router = new express.Router(),
   { sendCancellationEmail } = require('../../emails');
 
@@ -38,7 +39,7 @@ router.post('/api/users/logout', async (req, res) => {
     });
     await req.user.save();
     res.clearCookie('jwt');
-    res.json({ message: 'logged out' });
+    res.json({ message: 'Logged out' });
   } catch (e) {
     res.status(500).json({ error: e.toString() });
   }
@@ -74,20 +75,18 @@ router.delete('/api/users/me', async (req, res) => {
 // ******************************
 // Update password
 // ******************************
-router.put('/password', async (req, res) => {
+router.put('/api/password', async (req, res) => {
   try {
-    const hashedPassword = await bcryptjs.hash(req.body.password, 8);
-    req.user.password = hashedPassword;
+    req.user.password = req.body.password;
     await req.user.save();
     res.clearCookie('jwt');
-    res.redirect('/login');
+    res.json({ message: 'Password updated successfully' });
   } catch (e) {
     res.json({ error: e.toString() });
   }
 });
 
 router.post('/api/users/avatar', async (req, res) => {
-  // console.log(req.files.avatar);
   try {
     const response = await cloudinary.uploader.upload(
       req.files.avatar.tempFilePath
