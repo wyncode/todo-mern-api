@@ -9,7 +9,7 @@ const UpdatePassword = ({ history }) => {
   const handleChange = (e) => {
     setPassword({ ...password, [e.target.name]: e.target.value });
   };
-  console.log(password);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password.password !== password.confirmPassword) {
