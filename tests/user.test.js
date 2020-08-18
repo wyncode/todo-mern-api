@@ -19,9 +19,9 @@ test('Should signup a new user', async () => {
   const user = await User.findById(response.body._id);
   expect(user).not.toBeNull();
   // Assertions about the response
-  expect(response.body.name).toBe("Leo")
-  expect(response.body.email).toBe("leo@leo.com")
-  expect(response.body.email).toBe("leo@leo.com")
+  expect(response.body.name).toBe('Leo');
+  expect(response.body.email).toBe('leo@leo.com');
+  expect(response.body.email).toBe('leo@leo.com');
   expect(user.password).not.toBe('remember');
 });
 
