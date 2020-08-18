@@ -16,10 +16,12 @@ NOTE: A SendGrid API key is required for email notifications.
 $ git clone git@github.com:wyncode/todo-mern-api.git
 $ cd todo-mern-api
 $ yarn
-$ cp .env.sample .env
+$ mkdir config
+$ cp .env.sample config/dev.env
+$ cp .env.sample config/test.env
 ```
 
-You will then need to fill in your environment variables in your `.env` file.
+Fill in your environment variables in your `.env` files.
 
 To reset and seed your database:
 
