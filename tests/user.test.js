@@ -48,11 +48,13 @@ test('Should not login a nonexistent user', async () => {
 });
 
 test('Should get profile for user', async () => {
-  await request(app)
+  const response = await request(app)
     .get('/api/users/me')
     .set('Authorization', `jwt ${userOne.tokens[0].token}`)
     .send()
     .expect(200);
+  expect(response.body.name).toBe('Leo Test');
+  expect(response.body.email).toBe('test@test.com');
 });
 
 test('Should not get profile for  unauthenticated user', async () => {
@@ -103,4 +105,31 @@ test('Should not update invalid user fields', async () => {
       location: 'Philadelphia'
     })
     .expect(400);
+});
+
+test('Should log out a user', async () => {
+  const response = await request(app)
+    .post('/api/users/logout')
+    .set('Authorization', `jwt ${userOne.tokens[0].token}`)
+    .expect(200);
+  expect(response.body.message).toBe('Logged out');
+});
+
+test('Should log out all tokens', async () => {
+  const response = await request(app)
+    .post('/api/users/logoutAll')
+    .set('Authorization', `jwt ${userOne.tokens[0].token}`)
+    .expect(200);
+  expect(response.body.message).toBe('all devices logged out');
+});
+
+test('Should update user password', async () => {
+  const response = await request(app)
+    .put('/api/password')
+    .set('Authorization', `jwt ${userOne.tokens[0].token}`)
+    .send({
+      password: 'Philadelphia'
+    })
+    .expect(200);
+  expect(response.body.message).toBe('password updated successfully');
 });
