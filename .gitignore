@@ -3,3 +3,4 @@ node_modules
 avatars/
 .vscode
 settings.json
+config/
