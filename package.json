@@ -12,10 +12,7 @@
     "heroku-postbuild": "cd client && yarn && yarn run build"
   },
   "jest": {
-    "testEnvironment": "node",
-    "globals": {
-      "MONGODB_URL": "mongodb://127.0.0.1:27017/todo-test"
-    }
+    "testEnvironment": "node"
   },
   "devDependencies": {
     "babel-jest": "24.9.0",
