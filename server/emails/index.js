@@ -18,7 +18,7 @@ const sendCancellationEmail = (email, name) => {
     to: email,
     from: `${process.env.FROM_EMAIL}`,
     subject: 'Sorry to see you go.',
-    text: `Bye ${name}. We hope to see you again soon.`
+    text: `Bye ${name}. Hope to see you soon.`
   });
 };
 

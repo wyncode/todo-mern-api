@@ -70,7 +70,6 @@ router.get('/api/tasks', async (req, res) => {
     res.status(500).json({ error: e.toString() });
   }
 });
-
 // ***********************************************//
 // Update a task
 // ***********************************************//
@@ -82,7 +81,6 @@ router.patch('/api/tasks/:id', async (req, res) => {
   );
   if (!isValidOperation)
     return res.status(400).send({ error: 'Invalid updates!' });
-
   try {
     const task = await Task.findOne({
       _id: req.params.id,
