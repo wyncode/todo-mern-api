@@ -8,9 +8,11 @@ const express = require('express'),
   openRoutes = require('./routes/open'),
   passport = require('./middleware/authentication'),
   path = require('path'),
+  morgan = require('morgan'),
   app = express(),
   fileUpload = require('express-fileupload');
 
+app.use(morgan('dev'));
 // Parse incoming JSON into objects
 app.use(express.json());
 
@@ -19,7 +21,6 @@ app.use(openRoutes);
 
 app.use(cookieParser());
 
-//
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
   app.use(express.static(path.join(__dirname, '../client/build')));
