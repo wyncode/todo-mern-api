@@ -9,10 +9,12 @@ const express = require('express'),
   passport = require('./middleware/authentication'),
   path = require('path'),
   app = express(),
+  morgan = require('morgan'),
   fileUpload = require('express-fileupload');
 
 // Parse incoming JSON into objects
 app.use(express.json());
+app.use(morgan('dev'));
 
 // Unauthenticated routes
 app.use(openRoutes);
