@@ -2,7 +2,6 @@
 require('./db/config');
 
 const express = require('express'),
-  // import routes
   userRouter = require('./routes/secure/users'),
   cookieParser = require('cookie-parser'),
   taskRouter = require('./routes/secure/tasks'),

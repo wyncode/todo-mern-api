@@ -1,5 +1,3 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-
 require('./mongoose');
 
 const Task = require('../models/task'),

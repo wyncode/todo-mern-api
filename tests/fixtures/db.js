@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const User = require('../../server/db/models/user');
 const Task = require('../../server/db/models/task');
 
+afterAll(async () => {
+  await mongoose.connection.close();
+});
+
 const userOneId = new mongoose.Types.ObjectId();
 const userTwoId = new mongoose.Types.ObjectId();
 
