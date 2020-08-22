@@ -1,3 +1,11 @@
 language: node_js
 node_js:
   - 14
+
+env:
+  - MONGODB_URL=mongodb://127.0.0.1:27017/todo-test
+  - SENDGRID_API_KEY=SG.
+  - FROM_EMAIL=meta@wyncode.co
+  - JWT_SECRET=canbeanything
+  - APP_URL=http://localhost:8080
+  - CLOUDINARY_URL=cloudinary://
