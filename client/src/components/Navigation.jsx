@@ -56,7 +56,7 @@ const Navigation = () => {
             <Dropdown drop="down" style={{}} className="mr-1">
               <Dropdown.Toggle variant="">
                 <Image
-                  src={currentUser?.avatar ? currentUser.avatar : wyncode}
+                  src={currentUser.avatar || wyncode}
                   height={50}
                   width={50}
                   roundedCircle
