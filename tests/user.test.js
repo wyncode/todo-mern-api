@@ -125,7 +125,7 @@ test('Should log out all tokens', async () => {
 
 test('Should update user password', async () => {
   const response = await request(app)
-    .put('/api/password')
+    .put('/api/users/password')
     .set('Authorization', `jwt ${userOne.tokens[0].token}`)
     .send({
       password: 'Philadelphia'

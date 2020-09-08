@@ -5,12 +5,12 @@ const router = require('express').Router(),
 // ***********************************************//
 // Get current user
 // ***********************************************//
-router.get('/api/users/me', async (req, res) => res.json(req.user));
+router.get('/me', async (req, res) => res.json(req.user));
 
 // ***********************************************//
 // Update a user
 // ***********************************************//
-router.patch('/api/users/me', async (req, res) => {
+router.patch('/me', async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['name', 'email', 'password', 'avatar'];
   const isValidOperation = updates.every((update) =>
@@ -30,7 +30,7 @@ router.patch('/api/users/me', async (req, res) => {
 // ***********************************************//
 // Logout a user
 // ***********************************************//
-router.post('/api/users/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
@@ -46,7 +46,7 @@ router.post('/api/users/logout', async (req, res) => {
 // ***********************************************//
 // Logout all devices
 // ***********************************************//
-router.post('/api/users/logoutAll', async (req, res) => {
+router.post('/logoutAll', async (req, res) => {
   try {
     req.user.tokens = [];
     await req.user.save();
@@ -60,7 +60,7 @@ router.post('/api/users/logoutAll', async (req, res) => {
 // ***********************************************//
 // Delete a user
 // ***********************************************//
-router.delete('/api/users/me', async (req, res) => {
+router.delete('/me', async (req, res) => {
   try {
     await req.user.remove();
     sendCancellationEmail(req.user.email, req.user.name);
@@ -74,7 +74,7 @@ router.delete('/api/users/me', async (req, res) => {
 // ***********************************************//
 // Upload avatar
 // ***********************************************//
-router.post('/api/users/avatar', async (req, res) => {
+router.post('/avatar', async (req, res) => {
   try {
     const response = await cloudinary.uploader.upload(
       req.files.avatar.tempFilePath
@@ -90,7 +90,7 @@ router.post('/api/users/avatar', async (req, res) => {
 // ******************************
 // Update password
 // ******************************
-router.put('/api/password', async (req, res) => {
+router.put('/password', async (req, res) => {
   try {
     req.user.password = req.body.password;
     await req.user.save();
