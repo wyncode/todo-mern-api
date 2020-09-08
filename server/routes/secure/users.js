@@ -90,7 +90,7 @@ router.post('/api/users/avatar', async (req, res) => {
 // ******************************
 // Update password
 // ******************************
-router.put('/api/password', async (req, res) => {
+router.put('/api/user/password', async (req, res) => {
   try {
     req.user.password = req.body.password;
     await req.user.save();

@@ -6,7 +6,7 @@ const router = require('express').Router(),
 // ***********************************************//
 // Create a user
 // ***********************************************//
-router.post('/api/users/', async (req, res) => {
+router.post('/', async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const user = new User({
@@ -31,7 +31,7 @@ router.post('/api/users/', async (req, res) => {
 // ***********************************************//
 // Login a user
 // ***********************************************//
-router.post('/api/users/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findByCredentials(email, password);
@@ -53,7 +53,7 @@ router.post('/api/users/login', async (req, res) => {
 // user must click within 10 minutes
 // to reset their password.
 // ******************************
-router.get('/api/password', async (req, res) => {
+router.get('/password', async (req, res) => {
   try {
     const { email } = req.query,
       user = await User.findOne({ email });
@@ -76,7 +76,7 @@ router.get('/api/password', async (req, res) => {
 // ******************************
 // Redirect to password reset page
 // ******************************
-router.get('/api/password/:token', (req, res) => {
+router.get('/password/:token', (req, res) => {
   const { token } = req.params;
   try {
     jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {

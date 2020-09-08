@@ -12,7 +12,7 @@ const ResetPassword = () => {
 
     const form = e.target;
     try {
-      const response = await axios.get(`/api/password?email=${email}`);
+      const response = await axios.get(`/api/user/password?email=${email}`);
       if (response) {
         swal(
           'Email sent',

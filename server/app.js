@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // Unauthenticated routes
-app.use(openRoutes);
+app.use('/api/users', openRoutes);
 
 app.use(cookieParser());
 
