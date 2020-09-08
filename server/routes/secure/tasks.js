@@ -5,7 +5,7 @@ const router = require('express').Router(),
 // ***********************************************//
 // Create a task
 // ***********************************************//
-router.post('/api/tasks', async (req, res) => {
+router.post('/', async (req, res) => {
   const task = await new Task({
     ...req.body,
     owner: req.user._id
@@ -21,7 +21,7 @@ router.post('/api/tasks', async (req, res) => {
 // ***********************************************//
 // Get a specific task
 // ***********************************************//
-router.get('/api/tasks/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id))
     return res.status(400).send('Not a valid task id');
@@ -43,7 +43,7 @@ router.get('/api/tasks/:id', async (req, res) => {
 // /tasks?sortBy=createdAt:asc
 // /tasks?sortBy=dueDate:desc
 // ***********************************************//
-router.get('/api/tasks', async (req, res) => {
+router.get('/', async (req, res) => {
   const match = {},
     sort = {};
 
@@ -73,7 +73,7 @@ router.get('/api/tasks', async (req, res) => {
 // ***********************************************//
 // Update a task
 // ***********************************************//
-router.patch('/api/tasks/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['description', 'completed', 'dueDate'];
   const isValidOperation = updates.every((update) =>
@@ -98,7 +98,7 @@ router.patch('/api/tasks/:id', async (req, res) => {
 // ***********************************************//
 // Delete a task
 // ***********************************************//
-router.delete('/api/tasks/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({
       _id: req.params.id,

@@ -41,8 +41,8 @@ app.use(
 );
 
 //  Authenticated  Routes
-app.use(userRouter);
-app.use(taskRouter);
+app.use('/api/users', userRouter);
+app.use('/api/tasks', taskRouter);
 
 if (process.env.NODE_ENV === 'production') {
   // Handle React routing, return all requests to React app
