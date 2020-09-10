@@ -53,10 +53,10 @@ const Navigation = () => {
         </Nav>
         <Nav>
           <Nav.Item>
-            <Dropdown drop="down" style={{}} className="mr-1">
+            <Dropdown drop="down" className="mr-1">
               <Dropdown.Toggle variant="">
                 <Image
-                  src={currentUser.avatar || wyncode}
+                  src={currentUser?.avatar || wyncode}
                   height={50}
                   width={50}
                   roundedCircle

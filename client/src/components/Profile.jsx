@@ -82,13 +82,7 @@ const Profile = ({ history: { push } }) => {
         <h1 className="mt-4">Your Profile</h1>
         <div className="mt-4">
           <Image
-            src={
-              preview
-                ? preview
-                : currentUser?.avatar
-                ? currentUser.avatar
-                : wyncode
-            }
+            src={preview || currentUser?.avatar || wyncode}
             alt="profile-picture"
             width={250}
             height={250}

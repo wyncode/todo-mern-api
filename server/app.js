@@ -34,16 +34,10 @@ app.use(
 );
 
 //  Authenticated  Routes
-app.use(
-  '/api/users',
-  passport.authenticate('jwt', { session: false }),
-  userRouter
-);
-app.use(
-  '/api/tasks',
-  passport.authenticate('jwt', { session: false }),
-  taskRouter
-);
+app.use('/api/*', passport.authenticate('jwt', { session: false }));
+
+app.use('/api/users', userRouter);
+app.use('/api/tasks', taskRouter);
 
 if (process.env.NODE_ENV === 'production') {
   // Handle React routing, return all requests to React app
