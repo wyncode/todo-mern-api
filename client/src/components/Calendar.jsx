@@ -12,7 +12,7 @@ const Calendar = () => {
     const date = task.dueDate;
     return { title, date };
   });
-  console.log(events);
+
   return (
     <Container className="mt-2">
       <FullCalendar
