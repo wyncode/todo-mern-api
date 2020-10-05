@@ -1,5 +1,4 @@
 const validateSignUpForm = (formData) => {
-  console.log(formData);
   let errors = {};
   if (!formData.email) {
     errors.email = 'Email address is required';
