@@ -9,12 +9,21 @@ on:
   pull_request:
     branches: [ master ]
 
+
+
 jobs:
   build:
     name: Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
     steps:
       - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+         node-version: ${{ matrix.node-version }}
       - uses: borales/actions-yarn@v2.0.0
         with:
           cmd: install # will run `yarn install` command
@@ -24,3 +33,10 @@ jobs:
       - uses: borales/actions-yarn@v2.0.0
         with:
           cmd: test # will run `yarn test` command
+
+
+
+
+steps:
+  - uses: actions/checkout@v2
+  
