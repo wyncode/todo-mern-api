@@ -35,8 +35,4 @@ jobs:
           cmd: test # will run `yarn test` command
 
 
-
-
-steps:
-  - uses: actions/checkout@v2
   
