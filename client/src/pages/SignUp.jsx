@@ -2,12 +2,14 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
+import validateSignUpForm from '../validations/validateSignUpForm';
 import swal from 'sweetalert';
 import axios from 'axios';
 
 const SignUp = ({ history }) => {
   const { setCurrentUser } = useContext(AuthContext);
   const [formData, setFormData] = useState(null);
+  const [errors, setErrors] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,6 +17,14 @@ const SignUp = ({ history }) => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    const error = validateSignUpForm(formData);
+    setErrors(error);
+
+    if (error.email || error.password || error.name) {
+      console.log(error);
+      return;
+    }
+
     try {
       const response = await axios.post('/api/users', formData);
       setCurrentUser(response.data);
@@ -37,6 +47,11 @@ const SignUp = ({ history }) => {
             name="name"
             onChange={handleChange}
           />
+          {errors?.name && (
+            <p style={{ color: 'red' }} className="ml-2 mt-2">
+              {errors.name}
+            </p>
+          )}
         </Form.Group>
 
         <Form.Group controlId="formBasicEmail">
@@ -47,6 +62,11 @@ const SignUp = ({ history }) => {
             name="email"
             onChange={handleChange}
           />
+          {errors?.email && (
+            <p style={{ color: 'red' }} className="ml-2 mt-2">
+              {errors.email}
+            </p>
+          )}
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
@@ -57,6 +77,11 @@ const SignUp = ({ history }) => {
             name="password"
             onChange={handleChange}
           />
+          {errors?.password && (
+            <p style={{ color: 'red' }} className="ml-2 mt-2">
+              {errors.password}
+            </p>
+          )}
         </Form.Group>
         <Form.Group className="d-flex justify-content-center">
           <Button variant="primary" type="submit">

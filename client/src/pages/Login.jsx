@@ -4,10 +4,12 @@ import { Container, Form, Button } from 'react-bootstrap';
 import swal from 'sweetalert';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import validateLoginForm from '../validations/validateLoginForm';
 
 const Login = ({ history }) => {
   const { setCurrentUser } = useContext(AuthContext);
   const [formData, setFormData] = useState(null);
+  const [errors, setErrors] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,6 +17,13 @@ const Login = ({ history }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const error = validateLoginForm(formData);
+    setErrors(error);
+
+    if (error.email || error.password) {
+      return;
+    }
+
     try {
       const response = await axios.post('/api/users/login', formData);
       setCurrentUser(response.data);
@@ -38,6 +47,11 @@ const Login = ({ history }) => {
             name="email"
             onChange={handleChange}
           />
+          {errors?.email && (
+            <p style={{ color: 'red' }} className="ml-2 mt-2">
+              {errors.email}
+            </p>
+          )}
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
@@ -48,6 +62,11 @@ const Login = ({ history }) => {
             name="password"
             onChange={handleChange}
           />
+          {errors?.password && (
+            <p style={{ color: 'red' }} className="ml-2 mt-2">
+              {errors.password}
+            </p>
+          )}
         </Form.Group>
         <Form.Group className="d-flex justify-content-center">
           <Button variant="primary" type="submit">
