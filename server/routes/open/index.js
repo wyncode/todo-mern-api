@@ -1,51 +1,20 @@
 const router = require('express').Router(),
-  { sendWelcomeEmail, forgotPasswordEmail } = require('../../emails'),
-  jwt = require('jsonwebtoken'),
-  User = require('../../db/models/user');
+  {
+    createUser,
+    loginUser,
+    requestPasswordReset,
+    passwordRedirect
+  } = require('../../controllers/users');
 
 // ***********************************************//
 // Create a user
 // ***********************************************//
-router.post('/', async (req, res) => {
-  const { name, email, password } = req.body;
-  try {
-    const user = new User({
-      name,
-      email,
-      password
-    });
-
-    const token = await user.generateAuthToken();
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      sameSite: 'Strict',
-      secure: process.env.NODE_ENV !== 'production' ? false : true
-    });
-    sendWelcomeEmail(user.email, user.name);
-    res.status(201).json(user);
-  } catch (e) {
-    res.status(400).json({ error: e.toString() });
-  }
-});
+router.post('/', createUser);
 
 // ***********************************************//
 // Login a user
 // ***********************************************//
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findByCredentials(email, password);
-    const token = await user.generateAuthToken();
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      sameSite: 'Strict',
-      secure: process.env.NODE_ENV !== 'production' ? false : true
-    });
-    res.json(user);
-  } catch (e) {
-    res.status(400).json({ error: e.toString() });
-  }
-});
+router.post('/login', loginUser);
 
 // ******************************
 // Password Reset Request
@@ -53,44 +22,11 @@ router.post('/login', async (req, res) => {
 // user must click within 10 minutes
 // to reset their password.
 // ******************************
-router.get('/password', async (req, res) => {
-  try {
-    const { email } = req.query,
-      user = await User.findOne({ email });
-    if (!user) throw new Error("account doesn't exist");
-    // Build jwt token
-    const token = jwt.sign(
-      { _id: user._id.toString(), name: user.name },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: '10m'
-      }
-    );
-    forgotPasswordEmail(email, token);
-    res.json({ message: 'reset password email sent' });
-  } catch (e) {
-    res.json({ error: e.toString() });
-  }
-});
+router.get('/password', requestPasswordReset);
 
 // ******************************
 // Redirect to password reset page
 // ******************************
-router.get('/password/:token', (req, res) => {
-  const { token } = req.params;
-  try {
-    jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
-      if (err) throw new Error(err.message);
-    });
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: 600000,
-      sameSite: 'Strict'
-    });
-    res.redirect(process.env.URL + '/update-password');
-  } catch (e) {
-    res.json({ error: e.toString() });
-  }
-});
+router.get('/password/:token', passwordRedirect);
 
 module.exports = router;
