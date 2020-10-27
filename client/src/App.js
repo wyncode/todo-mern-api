@@ -10,6 +10,7 @@ import ResetPassword from './pages/ResetPassword';
 import './App.css';
 import Profile from './components/Profile';
 import UpdatePassword from './pages/UpdatePassword';
+import Calendar from './pages/Calendar';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route exact path="/update-password" component={UpdatePassword} />
           <PrivateRoute exact path="/" component={Home} />
           <PrivateRoute exact path="/profile" component={Profile} />
+          <PrivateRoute exact path="/calendar" component={Calendar} />
         </Switch>
       </BrowserRouter>
     </AuthProvider>
