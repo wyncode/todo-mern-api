@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
   const [currentFilter, setCurrentFilter] = useState(null);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [calendarView, setCalendarView] = useState(false);
   const user = sessionStorage.getItem('user');
 
   useEffect(() => {
@@ -44,9 +43,7 @@ export const AuthProvider = ({ children }) => {
         setFilteredTasks,
         filteredTasks,
         loading,
-        setLoading,
-        calendarView,
-        setCalendarView
+        setLoading
       }}
     >
       {children}

@@ -9,16 +9,11 @@ import Logout from './Logout';
 const Navigation = () => {
   const [active, setActive] = useState({
     completed: false,
-    pending: false,
-    calendar: false
+    pending: false
   });
-  const {
-    currentUser,
-    tasks,
-    setFilteredTasks,
-    setCurrentFilter,
-    setCalendarView
-  } = useContext(AuthContext);
+  const { currentUser, tasks, setFilteredTasks, setCurrentFilter } = useContext(
+    AuthContext
+  );
   const filterCompleted = (query) => {
     dueFilter(query, tasks, setFilteredTasks);
     setCurrentFilter(query);
@@ -26,7 +21,7 @@ const Navigation = () => {
 
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand as={Link} to="/" onClick={() => setCalendarView(false)}>
+      <Navbar.Brand as={Link} to="/">
         Task Manager
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -36,7 +31,6 @@ const Navigation = () => {
             className="mr-2"
             onClick={() => {
               filterCompleted('Completed');
-              setCalendarView(false);
             }}
             onMouseEnter={() => setActive({ ...active, completed: true })}
             onMouseLeave={() => setActive({ ...active, completed: false })}
@@ -50,7 +44,6 @@ const Navigation = () => {
           <Nav.Item
             onClick={() => {
               filterCompleted('Pending');
-              setCalendarView(false);
             }}
             onMouseEnter={() => setActive({ ...active, pending: true })}
             onMouseLeave={() => setActive({ ...active, pending: false })}
@@ -69,7 +62,8 @@ const Navigation = () => {
               cursor: 'pointer',
               textDecoration: active.calendar ? 'underline' : 'none'
             }}
-            onClick={() => setCalendarView(true)}
+            as={Link}
+            to="/calendar"
           >
             Calendar
           </Nav.Item>

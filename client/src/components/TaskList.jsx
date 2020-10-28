@@ -17,17 +17,18 @@ const TaskList = () => {
 
   // initital render will set all the todos to the `tasks` state
   useEffect(() => {
-    axios
-      .get('/api/tasks?sortBy=dueDate:asc', {
-        withCredentials: true
-      })
-      .then((response) => {
-        setTasks(response.data);
-        setFilteredTasks(response.data);
-      })
-      .catch((error) => {
-        swal(`Oops!`, 'Something went wrong.');
-      });
+    !loading &&
+      axios
+        .get('/api/tasks?sortBy=dueDate:asc', {
+          withCredentials: true
+        })
+        .then((response) => {
+          setTasks(response.data);
+          setFilteredTasks(response.data);
+        })
+        .catch(() => {
+          swal(`Oops!`, 'Something went wrong.');
+        });
     // when setTasks, setFilteredTasks, and search values are changed, it will rerender.
   }, [setTasks, setFilteredTasks, search, loading]);
 
