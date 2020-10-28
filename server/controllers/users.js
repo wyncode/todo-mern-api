@@ -7,7 +7,9 @@ const User = require('../db/models/user'),
   cloudinary = require('cloudinary').v2,
   jwt = require('jsonwebtoken');
 
-//Functions for OPEN Routes
+// ***********************************************//
+// Create a user
+// ***********************************************//
 exports.createUser = async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -30,6 +32,9 @@ exports.createUser = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Login a user
+// ***********************************************//
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -46,6 +51,12 @@ exports.loginUser = async (req, res) => {
   }
 };
 
+// ******************************
+// Password Reset Request
+// This route sends an email that the
+// user must click within 10 minutes
+// to reset their password.
+// ******************************
 exports.requestPasswordReset = async (req, res) => {
   try {
     const { email } = req.query,
@@ -66,6 +77,9 @@ exports.requestPasswordReset = async (req, res) => {
   }
 };
 
+// ******************************
+// Redirect to password reset page
+// ******************************
 exports.passwordRedirect = async (req, res) => {
   const { token } = req.params;
   try {
@@ -83,9 +97,14 @@ exports.passwordRedirect = async (req, res) => {
   }
 };
 
-//Functions for SECURE Routes
+// ***********************************************//
+// Get current user
+// ***********************************************//
 exports.getCurrentUser = async (req, res) => res.json(req.user);
 
+// ***********************************************//
+// Update a user
+// ***********************************************//
 exports.updateCurrentUser = async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['name', 'email', 'password', 'avatar'];
@@ -103,6 +122,9 @@ exports.updateCurrentUser = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Logout a user
+// ***********************************************//
 exports.logoutUser = async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
@@ -116,6 +138,9 @@ exports.logoutUser = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Logout all devices
+// ***********************************************//
 exports.logoutAllDevices = async (req, res) => {
   try {
     req.user.tokens = [];
@@ -127,6 +152,9 @@ exports.logoutAllDevices = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Delete a user
+// ***********************************************//
 exports.deleteUser = async (req, res) => {
   try {
     await req.user.remove();
@@ -138,6 +166,9 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Upload avatar
+// ***********************************************//
 exports.uploadAvatar = async (req, res) => {
   try {
     const response = await cloudinary.uploader.upload(
@@ -151,6 +182,9 @@ exports.uploadAvatar = async (req, res) => {
   }
 };
 
+// ******************************
+// Update password
+// ******************************
 exports.updatePassword = async (req, res) => {
   try {
     req.user.password = req.body.password;

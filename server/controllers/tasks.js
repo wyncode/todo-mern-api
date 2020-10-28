@@ -1,6 +1,9 @@
 const mongoose = require('mongoose'),
   Task = require('../db/models/task');
 
+// ***********************************************//
+// Create a task
+// ***********************************************//
 exports.createTask = async (req, res) => {
   const task = await new Task({
     ...req.body,
@@ -14,6 +17,9 @@ exports.createTask = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Get a specific task
+// ***********************************************//
 exports.getSpecificTask = async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id))
@@ -29,6 +35,13 @@ exports.getSpecificTask = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Get all tasks
+// /tasks?completed=true
+// /tasks?limit=10&skip=10
+// /tasks?sortBy=createdAt:asc
+// /tasks?sortBy=dueDate:desc
+// ***********************************************//
 exports.getAllTasks = async (req, res) => {
   const match = {},
     sort = {};
@@ -57,6 +70,9 @@ exports.getAllTasks = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Update a task
+// ***********************************************//
 exports.updateTask = async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['description', 'completed', 'dueDate'];
@@ -79,6 +95,9 @@ exports.updateTask = async (req, res) => {
   }
 };
 
+// ***********************************************//
+// Delete a task
+// ***********************************************//
 exports.deleteTask = async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({
