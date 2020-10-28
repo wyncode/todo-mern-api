@@ -3,8 +3,8 @@ const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
-const sendWelcomeEmail = (email, name) => {
-  sgMail.send({
+const sendWelcomeEmail = async (email, name) => {
+  await sgMail.send({
     to: email,
     from: `${process.env.FROM_EMAIL}`,
     subject: 'Thanks for signing up.',
@@ -13,8 +13,8 @@ const sendWelcomeEmail = (email, name) => {
   });
 };
 
-const sendCancellationEmail = (email, name) => {
-  sgMail.send({
+const sendCancellationEmail = async (email, name) => {
+  await sgMail.send({
     to: email,
     from: `${process.env.FROM_EMAIL}`,
     subject: 'Sorry to see you go.',
@@ -22,12 +22,12 @@ const sendCancellationEmail = (email, name) => {
   });
 };
 
-const forgotPasswordEmail = (email, token) => {
+const forgotPasswordEmail = async (email, token) => {
   const exampleHTMLEmail = `
   <a target="_blank" rel="noopener noreferrer" href="${process.env.APP_URL}/api/users/password/${token}">Reset Password</a>
   `;
 
-  sgMail.send({
+  await sgMail.send({
     to: email,
     from: `${process.env.FROM_EMAIL}`,
     subject: 'Password Reset.',

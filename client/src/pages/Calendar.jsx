@@ -23,7 +23,7 @@ const Calendar = () => {
     console.log('hit');
   }, [loading, tasks, setLoading, taskDate, modalShow]);
 
-  console.log(events);
+  console.log(tasks);
 
   const handleDateClick = (e) => {
     setTaskDate(e.dateStr);
