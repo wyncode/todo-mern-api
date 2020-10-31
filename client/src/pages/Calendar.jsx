@@ -10,25 +10,26 @@ import Navigation from '../components/Navigation';
 const Calendar = () => {
   const [modalShow, setModalShow] = useState(false);
   const [taskDate, setTaskDate] = useState(null);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState(null);
   const { tasks, loading, setLoading } = useContext(AuthContext);
 
   useEffect(() => {
+    setLoading(true);
     const updateTasks = tasks.map((task) => {
       const title = task.description;
       const date = task.dueDate;
-      return { title, date };
+      const color = task.completed ? '#32B679' : '#059CE5';
+      return { title, date, color };
     });
     setEvents(updateTasks);
     console.log('hit');
-  }, [loading, tasks, setLoading, taskDate, modalShow]);
-
-  console.log(tasks);
+  }, [tasks, modalShow, loading]);
 
   const handleDateClick = (e) => {
     setTaskDate(e.dateStr);
     setModalShow(true);
   };
+
   return (
     <>
       <Navigation />
