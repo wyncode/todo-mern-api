@@ -12,7 +12,8 @@ const TaskList = () => {
     search,
     filteredTasks,
     setFilteredTasks,
-    loading
+    loading,
+    setLoading
   } = useContext(AuthContext);
 
   // initital render will set all the todos to the `tasks` state
@@ -25,6 +26,7 @@ const TaskList = () => {
         .then((response) => {
           setTasks(response.data);
           setFilteredTasks(response.data);
+          setLoading(true);
         })
         .catch(() => {
           swal(`Oops!`, 'Something went wrong.');
