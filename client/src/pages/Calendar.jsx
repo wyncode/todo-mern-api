@@ -6,12 +6,22 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { AuthContext } from '../context/AuthContext';
 import AddTaskModal from '../components/AddTaskModal';
 import Navigation from '../components/Navigation';
+import axios from 'axios';
 
 const Calendar = () => {
   const [modalShow, setModalShow] = useState(false);
   const [taskDate, setTaskDate] = useState(null);
   const [events, setEvents] = useState(null);
-  const { tasks, loading, setLoading } = useContext(AuthContext);
+  const { tasks, setTasks, loading, setLoading } = useContext(AuthContext);
+
+  useEffect(() => {
+    axios
+      .get('/api/tasks', { withCredentials: true })
+      .then((response) => {
+        setTasks(response.data);
+      })
+      .catch((error) => console.log(error.toString()));
+  }, [loading]);
 
   useEffect(() => {
     setLoading(true);
@@ -22,8 +32,7 @@ const Calendar = () => {
       return { title, date, color };
     });
     setEvents(updateTasks);
-    console.log('hit');
-  }, [tasks, modalShow, loading]);
+  }, [tasks]);
 
   const handleDateClick = (e) => {
     setTaskDate(e.dateStr);

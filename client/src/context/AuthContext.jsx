@@ -29,15 +29,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [currentUser, user]);
 
-  useEffect(() => {
-    axios
-      .get('/api/tasks', { withCredentials: true })
-      .then((response) => {
-        setTasks(response.data);
-      })
-      .catch((error) => console.log(error.toString()));
-  }, [loading]);
-
   return (
     <AuthContext.Provider
       value={{
