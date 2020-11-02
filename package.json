@@ -18,9 +18,11 @@
   "devDependencies": {
     "babel-jest": "24.9.0",
     "env-cmd": "^8.0.2",
+    "husky": "^4.3.0",
     "jest": "^24.9.0",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
+    "pretty-quick": "^3.1.0",
     "supertest": "^4.0.2"
   },
   "dependencies": {
@@ -42,6 +44,11 @@
     "passport-jwt": "^4.0.0",
     "sharp": "^0.25.3",
     "validator": "^13.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "engines": {
     "node": ">= 14.0.0"
