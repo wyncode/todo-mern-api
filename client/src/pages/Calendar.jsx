@@ -6,29 +6,39 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { AuthContext } from '../context/AuthContext';
 import AddTaskModal from '../components/AddTaskModal';
 import Navigation from '../components/Navigation';
+import axios from 'axios';
 
 const Calendar = () => {
   const [modalShow, setModalShow] = useState(false);
   const [taskDate, setTaskDate] = useState(null);
-  const [events, setEvents] = useState([]);
-  const { tasks, loading, setLoading } = useContext(AuthContext);
+  const [events, setEvents] = useState(null);
+  const { tasks, setTasks, loading, setLoading } = useContext(AuthContext);
+
+  useEffect(() => {
+    axios
+      .get('/api/tasks', { withCredentials: true })
+      .then((response) => {
+        setTasks(response.data);
+        setLoading(false);
+      })
+      .catch((error) => console.log(error.toString()));
+  }, [loading, setLoading, setTasks]);
 
   useEffect(() => {
     const updateTasks = tasks.map((task) => {
       const title = task.description;
       const date = task.dueDate;
-      return { title, date };
+      const color = task.completed ? '#32B679' : '#059CE5';
+      return { title, date, color };
     });
     setEvents(updateTasks);
-    console.log('hit');
-  }, [loading, tasks, setLoading, taskDate, modalShow]);
-
-  console.log(tasks);
+  }, [tasks, loading, setLoading]);
 
   const handleDateClick = (e) => {
     setTaskDate(e.dateStr);
     setModalShow(true);
   };
+
   return (
     <>
       <Navigation />
