@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import swal from 'sweetalert';
 
 const AddTaskModal = (props) => {
-  const { setLoading } = useContext(AuthContext);
+  const { setLoading, loading } = useContext(AuthContext);
   const [description, setDescription] = useState(null);
 
   const handleSubmit = (e) => {
@@ -17,12 +17,13 @@ const AddTaskModal = (props) => {
         { dueDate: props.date, description },
         { withCredentials: true }
       );
-      setLoading(false);
       props.onHide();
     } catch (error) {
       swal('Oops!', 'Something went wrong');
     }
   };
+
+  console.log('Model' + loading);
 
   return (
     <Modal

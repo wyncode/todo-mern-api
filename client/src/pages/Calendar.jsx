@@ -19,12 +19,12 @@ const Calendar = () => {
       .get('/api/tasks', { withCredentials: true })
       .then((response) => {
         setTasks(response.data);
+        setLoading(false);
       })
       .catch((error) => console.log(error.toString()));
-  }, [loading]);
+  }, [loading, setLoading, setTasks]);
 
   useEffect(() => {
-    setLoading(true);
     const updateTasks = tasks.map((task) => {
       const title = task.description;
       const date = task.dueDate;
@@ -32,7 +32,7 @@ const Calendar = () => {
       return { title, date, color };
     });
     setEvents(updateTasks);
-  }, [tasks]);
+  }, [tasks, loading, setLoading]);
 
   const handleDateClick = (e) => {
     setTaskDate(e.dateStr);
