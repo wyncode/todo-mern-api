@@ -23,8 +23,6 @@ const AddTaskModal = (props) => {
     }
   };
 
-  console.log('Model' + loading);
-
   return (
     <Modal
       {...props}
