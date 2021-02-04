@@ -16,7 +16,6 @@ const Logout = () => {
         url: '/api/users/logout',
         withCredentials: true
       });
-      sessionStorage.removeItem('user');
       setCurrentUser(null);
       swal(response.data.message, 'You have signed out!', 'success').then(() =>
         history.push('/login')

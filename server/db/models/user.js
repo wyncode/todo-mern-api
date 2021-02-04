@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       unique: true,
-      required: true,
       trim: true,
       lowercase: true,
       validate(value) {
@@ -25,7 +24,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       trim: true,
       validate(value) {
         if (value.toLowerCase().includes('password')) {
@@ -115,6 +113,7 @@ userSchema.pre('remove', async function (next) {
   next();
 });
 
+userSchema.set('autoIndex', false);
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

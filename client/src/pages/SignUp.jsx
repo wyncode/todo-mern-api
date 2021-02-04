@@ -26,10 +26,8 @@ const SignUp = ({ history }) => {
     }
 
     try {
-      const response = await axios.post('/api/users', formData);
+      const response = await axios.post('/api/auth', formData);
       setCurrentUser(response.data);
-      // persists user if browser is refreshes.
-      sessionStorage.setItem('user', response.data);
       history.push('/');
     } catch (error) {
       swal('SignUp Error: ', error.toString());

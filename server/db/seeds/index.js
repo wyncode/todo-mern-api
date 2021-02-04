@@ -1,5 +1,3 @@
-require('./mongoose');
-
 const Task = require('../models/task'),
   User = require('../models/user'),
   faker = require('faker'),

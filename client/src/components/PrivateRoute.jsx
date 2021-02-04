@@ -1,8 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import cookies from 'js-cookie';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const user = sessionStorage.getItem('user');
+  const user = cookies.get('jwt');
 
   return (
     <Route

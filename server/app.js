@@ -16,8 +16,23 @@ const express = require('express'),
 app.use(express.json());
 app.use(morgan('dev'));
 
+app.use(
+  '/api/auth/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    session: false
+  })
+);
+
+app.use(
+  '/api/auth/facebook',
+  passport.authenticate('facebook', {
+    scope: 'email',
+    session: false
+  })
+);
 // Unauthenticated routes
-app.use('/api/users', openRoutes);
+app.use('/api/auth', openRoutes);
 
 app.use(cookieParser());
 
