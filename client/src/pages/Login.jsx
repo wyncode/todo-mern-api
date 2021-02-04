@@ -73,10 +73,12 @@ const Login = ({ history }) => {
           </Button>
         </Form.Group>
       </Form>
-      <a href={`${process.env.REACT_APP_BACKEND_URL}/api/auth/google`}>
+      <a href={`${process.env.REACT_APP_BACKEND_URL || null}/api/auth/google`}>
         <FaGoogle /> <span>Login with Google</span>
       </a>
-      <a href={`${process.env.REACT_APP_BACKEND_URL}/api/auth/facebook`}>
+      <a
+        href={`${process.env.REACT_APP_BACKEND_URL || null}/api/auth/facebook`}
+      >
         <FaFacebookF /> <span>Login with Facebook</span>
       </a>
       <Link to="/reset-password">Forgot Password?</Link>
