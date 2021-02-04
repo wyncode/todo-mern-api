@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import swal from 'sweetalert';
 import axios from 'axios';
+import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 import { AuthContext } from '../context/AuthContext';
 import validateLoginForm from '../validations/validateLoginForm';
 
@@ -25,10 +26,8 @@ const Login = ({ history }) => {
     }
 
     try {
-      const response = await axios.post('/api/users/login', formData);
+      const response = await axios.post('/api/auth/login', formData);
       setCurrentUser(response.data);
-      // persists user if browser is refreshes.
-      sessionStorage.setItem('user', response.data);
       history.push('/');
     } catch (error) {
       swal(`Oops!`, 'Something went wrong.');
@@ -74,6 +73,12 @@ const Login = ({ history }) => {
           </Button>
         </Form.Group>
       </Form>
+      <a href={`${process.env.REACT_APP_BACKEND_URL}/api/auth/google`}>
+        <FaGoogle /> <span>Login with Google</span>
+      </a>
+      <a href={`${process.env.REACT_APP_BACKEND_URL}/api/auth/facebook`}>
+        <FaFacebookF /> <span>Login with Facebook</span>
+      </a>
       <Link to="/reset-password">Forgot Password?</Link>
       <Link className="mt-4" to="/signup">
         Need an Account? Sign up.

@@ -21,7 +21,6 @@ exports.createUser = async (req, res) => {
 
     const token = await user.generateAuthToken();
     res.cookie('jwt', token, {
-      httpOnly: true,
       sameSite: 'Strict',
       secure: process.env.NODE_ENV !== 'production' ? false : true
     });
@@ -41,7 +40,6 @@ exports.loginUser = async (req, res) => {
     const user = await User.findByCredentials(email, password);
     const token = await user.generateAuthToken();
     res.cookie('jwt', token, {
-      httpOnly: true,
       sameSite: 'Strict',
       secure: process.env.NODE_ENV !== 'production' ? false : true
     });
@@ -87,7 +85,6 @@ exports.passwordRedirect = async (req, res) => {
       if (err) throw new Error(err.message);
     });
     res.cookie('jwt', token, {
-      httpOnly: true,
       maxAge: 600000,
       sameSite: 'Strict'
     });
@@ -194,4 +191,30 @@ exports.updatePassword = async (req, res) => {
   } catch (e) {
     res.json({ error: e.toString() });
   }
+};
+
+//Google login
+exports.googleLogin = async (req, res) => {
+  passport.authenticate('google', { scope: ['profile', 'email'] });
+};
+
+exports.googleRedirect = async (req, res) => {
+  res.cookie('jwt', req.user.tokens[0].token, {
+    sameSite: 'Strict',
+    secure: process.env.NODE_ENV !== 'production' ? false : true
+  });
+  res.redirect(`${process.env.URL}`);
+};
+
+//Facebook login
+exports.facebookLogin = async (req, res) => {
+  passport.authenticate('facebook', { scope: ['profile'] });
+};
+
+exports.facebookRedirect = async (req, res) => {
+  res.cookie('jwt', req.user.tokens[0].token, {
+    sameSite: 'Strict',
+    secure: process.env.NODE_ENV !== 'production' ? false : true
+  });
+  res.redirect(`${process.env.URL}`);
 };

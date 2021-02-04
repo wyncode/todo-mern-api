@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react';
 import swal from 'sweetalert';
+import cookies from 'js-cookie';
 import axios from 'axios';
 
 export const AuthContext = createContext();
@@ -11,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [currentFilter, setCurrentFilter] = useState(null);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const user = sessionStorage.getItem('user');
+  const user = cookies.get('jwt');
 
   useEffect(() => {
     // incase user refreshes local session is cleared.
