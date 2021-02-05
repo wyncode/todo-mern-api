@@ -6,6 +6,12 @@ const mongoose = require('mongoose'),
 
 const userSchema = new mongoose.Schema(
   {
+    uid: {
+      type: String,
+      unique: true,
+      trim: true,
+      lowercase: true
+    },
     name: {
       type: String,
       required: true,
